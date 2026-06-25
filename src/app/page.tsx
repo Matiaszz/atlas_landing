@@ -168,8 +168,8 @@ export default function Home() {
 
   const platforms: Platform[] = [
     { id: "web", name: "Sistemas Web", icon: <Globe size={20} />, tech: ["Next.js", "Node.js", "PostgreSQL"] },
-    { id: "android", name: "Aplicativo Android", icon: <Smartphone size={20} />, tech: ["Flutter", "Dart", "SQLite"] },
-    { id: "ios", name: "Aplicativo iOS", icon: <Smartphone size={20} />, tech: ["Flutter", "Dart", "SQLite"] },
+    { id: "android", name: "Aplicativo Android", icon: <Smartphone size={20} />, tech: ["Flutter", "Dart", "Firebase"] },
+    { id: "ios", name: "Aplicativo iOS", icon: <Smartphone size={20} />, tech: ["Flutter", "Dart", "Firebase"] },
     { id: "windows", name: "Aplicativo Windows", icon: <Laptop size={20} />, tech: ["Flutter", "Dart"] },
     { id: "linux", name: "Sistemas Linux", icon: <Terminal size={20} />, tech: ["Flutter", "Dart"] },
     { id: "cloud", name: "Integrações & Nuvem", icon: <Cpu size={20} />, tech: ["AWS", "Docker", "Node.js"] }
