@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { 
   Terminal, 
@@ -8,6 +8,8 @@ import {
   Laptop, 
   Globe, 
   Cpu, 
+  Database, 
+  Sparkles, 
   Code2, 
   MessageSquare, 
   Send, 
@@ -32,27 +34,6 @@ export default function Home() {
 
   // State for active navbar section
   const [activeSection, setActiveSection] = useState<string>("hero");
-
-  // Ref for chat window scrolling
-  const chatBodyRef = useRef<HTMLDivElement>(null);
-
-  // Auto-scroll to bottom of chat on new messages or typing state changes
-  useEffect(() => {
-    if (chatOpen && chatBodyRef.current) {
-      const scrollToBottom = () => {
-        if (chatBodyRef.current) {
-          chatBodyRef.current.scrollTo({
-            top: chatBodyRef.current.scrollHeight,
-            behavior: "smooth"
-          });
-        }
-      };
-      
-      // Delay slightly to allow DOM/state updates to complete
-      const scrollTimeout = setTimeout(scrollToBottom, 50);
-      return () => clearTimeout(scrollTimeout);
-    }
-  }, [chatMessages, chatIsTyping, chatOpen]);
 
   // State for application configuration estimator
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(["web"]);
@@ -783,7 +764,7 @@ export default function Home() {
               </button>
             </div>
 
-            <div className="chat-body" ref={chatBodyRef}>
+            <div className="chat-body">
               {chatMessages.map((msg, i) => (
                 <div key={i} className="chat-message-wrapper" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                   <div 
