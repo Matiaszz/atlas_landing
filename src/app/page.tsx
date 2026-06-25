@@ -33,26 +33,6 @@ export default function Home() {
   // State for active navbar section
   const [activeSection, setActiveSection] = useState<string>("hero");
 
-  // State for application configuration estimator
-  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(["web"]);
-  const [complexity, setComplexity] = useState<number>(2); // 1 = MVP, 2 = Core, 3 = Scaled Enterprise
-  const [copied, setCopied] = useState<boolean>(false);
-
-  // Live chat states
-  const [chatOpen, setChatOpen] = useState<boolean>(false);
-  const [chatMessages, setChatMessages] = useState<Array<{ sender: 'user' | 'agent', text: string, whatsappUrl?: string, buttons?: string[] }>>([
-    { 
-      sender: 'agent', 
-      text: 'Olá! Carregando assistente comercial...',
-      buttons: [],
-      whatsappUrl: ''
-    }
-  ]);
-  const [chatInput, setChatInput] = useState<string>("");
-  const [chatIsTyping, setChatIsTyping] = useState<boolean>(false);
-  const [typingText, setTypingText] = useState<string>("Ayla está pensando...");
-  const [isOnline, setIsOnline] = useState<boolean>(true);
-
   // Ref for chat window scrolling
   const chatBodyRef = useRef<HTMLDivElement>(null);
 
@@ -73,6 +53,26 @@ export default function Home() {
       return () => clearTimeout(scrollTimeout);
     }
   }, [chatMessages, chatIsTyping, chatOpen]);
+
+  // State for application configuration estimator
+  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(["web"]);
+  const [complexity, setComplexity] = useState<number>(2); // 1 = MVP, 2 = Core, 3 = Scaled Enterprise
+  const [copied, setCopied] = useState<boolean>(false);
+
+  // Live chat states
+  const [chatOpen, setChatOpen] = useState<boolean>(false);
+  const [chatMessages, setChatMessages] = useState<Array<{ sender: 'user' | 'agent', text: string, whatsappUrl?: string, buttons?: string[] }>>([
+    { 
+      sender: 'agent', 
+      text: 'Olá! Carregando assistente comercial...',
+      buttons: [],
+      whatsappUrl: ''
+    }
+  ]);
+  const [chatInput, setChatInput] = useState<string>("");
+  const [chatIsTyping, setChatIsTyping] = useState<boolean>(false);
+  const [typingText, setTypingText] = useState<string>("Ayla está pensando...");
+  const [isOnline, setIsOnline] = useState<boolean>(true);
 
   // Initialize welcome message and check online status dynamically on mount
   useEffect(() => {
