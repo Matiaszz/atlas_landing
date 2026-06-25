@@ -1,15 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import AtlasLogo from "./components/ui/AtlasLogo";
 import { 
   Terminal, 
   Smartphone, 
   Laptop, 
   Globe, 
   Cpu, 
-  Database, 
-  Sparkles, 
   Code2, 
   MessageSquare, 
   Send, 
@@ -53,28 +52,87 @@ export default function Home() {
   const [chatInput, setChatInput] = useState<string>("");
   const [chatIsTyping, setChatIsTyping] = useState<boolean>(false);
   const [typingText, setTypingText] = useState<string>("Ayla está pensando...");
-  const [isOnline, setIsOnline] = useState<boolean>(true);
+  const [mounted, setMounted] = useState<boolean>(false);
 
-  // Initialize welcome message and check online status dynamically on mount
-  useEffect(() => {
+  // Ref for chat window scrolling
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // Sidebar drag-to-resize state and logic
+  const [sidebarWidth, setSidebarWidth] = useState<number>(420);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      // Sidebar is on the right, so dragging left (smaller clientX) increases width
+      const newWidth = window.innerWidth - moveEvent.clientX;
+      if (newWidth >= 320 && newWidth <= window.innerWidth * 0.7) {
+        setSidebarWidth(newWidth);
+      }
+    };
+
+    const handleMouseUp = () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+  };
+
+  // Determine online status based on mount state to avoid Next.js hydration mismatch
+  const getOnlineStatus = () => {
+    if (!mounted) return true; // server-side default
     const now = new Date();
     const day = now.getDay();
     const hour = now.getHours();
-    const online = day >= 1 && day <= 5 && hour >= 8 && hour < 16;
-    setIsOnline(online);
-    
-    const statusText = online 
-      ? "estamos ONLINE e prontos para conversar!"
-      : "estamos OFFLINE no momento (nosso horário comercial é de Segunda a Sexta, das 08h às 16h), mas você já pode deixar sua ideia registrada!";
+    return day >= 1 && day <= 5 && hour >= 8 && hour < 16;
+  };
+  const isOnline = getOnlineStatus();
 
-    setChatMessages([
-      {
-        sender: 'agent',
-        text: `Olá! Eu sou a Ayla, a assistente comercial inteligente da Atlas NS. No momento, ${statusText} Qual sistema você deseja construir hoje?`,
-        buttons: ['whatsappButton', 'portfolioMatias', 'portfolioDavi'],
-        whatsappUrl: `https://wa.me/5511995995088?text=${encodeURIComponent("Olá Davi e Matias! Vim do site da Atlas NS e gostaria de iniciar um projeto.")}`
-      }
-    ]);
+  // Auto-scroll to bottom of chat on new messages or typing state changes
+  useEffect(() => {
+    if (chatOpen && chatEndRef.current) {
+      const scrollToBottom = () => {
+        chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      };
+      
+      const scrollTimeout = setTimeout(scrollToBottom, 50);
+      return () => clearTimeout(scrollTimeout);
+    }
+  }, [chatMessages, chatIsTyping, chatOpen]);
+
+  // Set mounted state and initialize welcome message
+  useEffect(() => {
+    // Defer state update to next execution cycle to avoid synchronous setState inside effect warning
+    const mountTimer = setTimeout(() => {
+      setMounted(true);
+    }, 0);
+    
+    const welcomeTimer = setTimeout(() => {
+      const now = new Date();
+      const day = now.getDay();
+      const hour = now.getHours();
+      const online = day >= 1 && day <= 5 && hour >= 8 && hour < 16;
+      
+      const statusText = online 
+        ? "estamos ONLINE e prontos para conversar!"
+        : "estamos OFFLINE no momento (nosso horário comercial é de Segunda a Sexta, das 08h às 16h), mas você já pode deixar sua ideia registrada!";
+
+      setChatMessages([
+        {
+          sender: 'agent',
+          text: `Olá! Eu sou a Ayla, a assistente comercial inteligente da Atlas NS. No momento, ${statusText} Qual sistema você deseja construir hoje?`,
+          buttons: ['whatsappButton', 'portfolioMatias', 'portfolioDavi'],
+          whatsappUrl: `https://wa.me/5511995995088?text=${encodeURIComponent("Olá Davi e Matias! Vim do site da Atlas NS e gostaria de iniciar um projeto.")}`
+        }
+      ]);
+    }, 0);
+    
+    return () => {
+      clearTimeout(mountTimer);
+      clearTimeout(welcomeTimer);
+    };
   }, []);
 
   // Dynamic typing message cycle for commercial bot
@@ -91,8 +149,6 @@ export default function Home() {
       "Ayla está digitando... 💻",
       "Ayla está conectando com a API comercial... ⚡"
     ];
-    
-    setTypingText(phrases[Math.floor(Math.random() * phrases.length)]);
     
     const interval = setInterval(() => {
       const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
@@ -227,6 +283,18 @@ export default function Home() {
     const userMsg = chatInput;
     setChatMessages(prev => [...prev, { sender: 'user', text: userMsg }]);
     setChatInput("");
+    
+    const phrases = [
+      "Ayla está pensando... 🧠",
+      "Formatando a melhor arquitetura... 🛠️",
+      "Consultando o Davi e o Matias no WhatsApp... 💬",
+      "Calculando prazos e atalhos comerciais... 💰",
+      "Ayla está de olho na melhor stack... 🚀",
+      "Preparando a solução perfeita para você... ✨",
+      "Ayla está digitando... 💻",
+      "Ayla está conectando com a API comercial... ⚡"
+    ];
+    setTypingText(phrases[Math.floor(Math.random() * phrases.length)]);
     setChatIsTyping(true);
 
     try {
@@ -288,7 +356,7 @@ export default function Home() {
       <header className="navbar">
         <div className="container nav-container">
           <a href="#hero" className="logo">
-            <div className="logo-dot" />
+            <AtlasLogo size={32} />
             <span>Atlas NS</span>
             <span className="logo-divider">/</span>
             <span key={activeSection} className="logo-section">
@@ -673,21 +741,21 @@ export default function Home() {
 
           <div className="principles-layout">
             <div className="principle-item">
-              <span className="principle-num">// 01</span>
+              <span className="principle-num">{"// 01"}</span>
               <h3 className="principle-title">Propriedade Total da sua Empresa</h3>
               <p className="principle-body">
                 Após a entrega, o código pertence 100% à sua empresa. Sem taxas de licenciamento recorrentes ou dependências comerciais do nosso time.
               </p>
             </div>
             <div className="principle-item">
-              <span className="principle-num">// 02</span>
+              <span className="principle-num">{"// 02"}</span>
               <h3 className="principle-title">Garantia Técnica e Testes</h3>
               <p className="principle-body">
                 Garantimos que o sistema funcione exatamente como planejado. Cada módulo entregue passa por rotinas rígidas de qualidade e testes de usabilidade.
               </p>
             </div>
             <div className="principle-item">
-              <span className="principle-num">// 03</span>
+              <span className="principle-num">{"// 03"}</span>
               <h3 className="principle-title">Entregas Semanais de Protótipos</h3>
               <p className="principle-body">
                 Trabalhamos com metodologias ativas. Você acompanha e valida protótipos funcionais semana a semana, vendo seu projeto evoluir em tempo real.
@@ -746,132 +814,140 @@ export default function Home() {
 
       {/* Floating WhatsApp Widget */}
       <div className="chat-widget">
-        {chatOpen ? (
-          <div className="chat-window">
-            <div className="chat-header">
-              <div className="chat-header-info">
-                <div className="avatar">
-                  AY
-                  <div className={`avatar-online ${isOnline ? "" : "avatar-offline"}`} />
-                </div>
-                <div className="chat-header-text">
-                  <h4>Ayla | Atlas NS</h4>
-                  <p>{isOnline ? "Online para suporte comercial" : "Fora do horário comercial (08h às 16h)"}</p>
+        <div 
+          className={`chat-window ${chatOpen ? "chat-window-open" : ""}`}
+          style={{ width: `${sidebarWidth}px` }}
+        >
+          {/* Custom drag-to-resize handle on left edge */}
+          <div 
+            className="sidebar-resize-handle"
+            onMouseDown={handleMouseDown}
+          />
+          <div className="chat-header">
+            <div className="chat-header-info">
+              <AtlasLogo></AtlasLogo>
+              <div className="chat-header-text">
+                <h4>Ayla | Atlas NS</h4>
+                <p>{isOnline ? "Online para suporte comercial" : "Fora do horário comercial (08h às 16h)"}</p>
+              </div>
+            </div>
+            <button onClick={() => setChatOpen(false)} className="chat-close-btn">
+              <X size={20} />
+            </button>
+          </div>
+
+          <div className="chat-body">
+            {chatMessages.map((msg, i) => (
+              <div key={i} className="chat-message-wrapper" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                <div 
+                  className={`chat-msg ${msg.sender === 'agent' ? 'chat-msg-received' : 'chat-msg-sent'}`}
+                >
+                  {msg.text}
+                  
+                  {msg.buttons && msg.buttons.length > 0 && (
+                    <div className="chat-buttons-container" style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '12px' }}>
+                      {msg.buttons.map(btnType => {
+                        if (btnType === "whatsappButton" && msg.whatsappUrl) {
+                          return (
+                            <a 
+                              key={btnType}
+                              href={msg.whatsappUrl} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="chat-cta-btn btn-success-chat"
+                            >
+                              Conversar com os Devs no WhatsApp
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+                            </a>
+                          );
+                        }
+                        if (btnType === "portfolioMatias") {
+                          return (
+                            <a 
+                              key={btnType}
+                              href="https://allanmatias.vercel.app" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="chat-cta-btn btn-secondary-chat"
+                            >
+                              Ver Portfólio do Matias
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+                            </a>
+                          );
+                        }
+                        if (btnType === "portfolioDavi") {
+                          return (
+                            <a 
+                              key={btnType}
+                              href="https://github.com/davibalieiro" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="chat-cta-btn btn-secondary-chat"
+                            >
+                              Ver GitHub do Davi
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+                            </a>
+                          );
+                        }
+                        return null;
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
-              <button onClick={() => setChatOpen(false)} className="chat-close-btn">
-                <X size={20} />
+            ))}
+            {chatIsTyping && (
+              <div className="chat-msg chat-msg-received" style={{ display: 'flex', flexDirection: 'column', gap: '6px', opacity: 0.9 }}>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                  {typingText}
+                </span>
+                <div className="typing-indicator" style={{ display: 'flex', gap: '4px', padding: '4px 0' }}>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            )}
+            {/* Dynamic scroll anchor */}
+            <div ref={chatEndRef} />
+          </div>
+
+          <div className="chat-footer">
+            <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: '8px' }}>
+              <input 
+                type="text" 
+                placeholder="Escreva sua mensagem..."
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                style={{ 
+                  flex: 1, 
+                  padding: '8px 12px', 
+                  borderRadius: 'var(--radius-sm)', 
+                  border: '1px solid var(--border-subtle)',
+                  backgroundColor: 'var(--bg-base)',
+                  color: 'var(--text-primary)',
+                  fontSize: '0.85rem'
+                }}
+              />
+              <button 
+                type="submit"
+                className="btn btn-primary"
+                style={{ padding: '8px 16px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                disabled={chatIsTyping}
+              >
+                <Send size={14} />
               </button>
-            </div>
-
-            <div className="chat-body">
-              {chatMessages.map((msg, i) => (
-                <div key={i} className="chat-message-wrapper" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                  <div 
-                    className={`chat-msg ${msg.sender === 'agent' ? 'chat-msg-received' : 'chat-msg-sent'}`}
-                  >
-                    {msg.text}
-                    
-                    {msg.buttons && msg.buttons.length > 0 && (
-                      <div className="chat-buttons-container" style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '12px' }}>
-                        {msg.buttons.map(btnType => {
-                          if (btnType === "whatsappButton" && msg.whatsappUrl) {
-                            return (
-                              <a 
-                                key={btnType}
-                                href={msg.whatsappUrl} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="chat-cta-btn btn-success-chat"
-                              >
-                                Conversar com os Devs no WhatsApp
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
-                              </a>
-                            );
-                          }
-                          if (btnType === "portfolioMatias") {
-                            return (
-                              <a 
-                                key={btnType}
-                                href="https://allanmatias.vercel.app" 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="chat-cta-btn btn-secondary-chat"
-                              >
-                                Ver Portfólio do Matias
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
-                              </a>
-                            );
-                          }
-                          if (btnType === "portfolioDavi") {
-                            return (
-                              <a 
-                                key={btnType}
-                                href="https://github.com/davibalieiro" 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="chat-cta-btn btn-secondary-chat"
-                              >
-                                Ver GitHub do Davi
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
-                              </a>
-                            );
-                          }
-                          return null;
-                        })}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-              {chatIsTyping && (
-                <div className="chat-msg chat-msg-received" style={{ display: 'flex', flexDirection: 'column', gap: '6px', opacity: 0.9 }}>
-                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                    {typingText}
-                  </span>
-                  <div className="typing-indicator" style={{ display: 'flex', gap: '4px', padding: '4px 0' }}>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="chat-footer">
-              <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: '8px' }}>
-                <input 
-                  type="text" 
-                  placeholder="Escreva sua mensagem..."
-                  value={chatInput}
-                  onChange={(e) => setChatInput(e.target.value)}
-                  style={{ 
-                    flex: 1, 
-                    padding: '8px 12px', 
-                    borderRadius: 'var(--radius-sm)', 
-                    border: '1px solid var(--border-subtle)',
-                    backgroundColor: 'var(--bg-base)',
-                    color: 'var(--text-primary)',
-                    fontSize: '0.85rem'
-                  }}
-                />
-                <button 
-                  type="submit"
-                  className="btn btn-primary"
-                  style={{ padding: '8px 16px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                  disabled={chatIsTyping}
-                >
-                  <Send size={14} />
-                </button>
-              </form>
-            </div>
+            </form>
           </div>
-        ) : (
-          <div onClick={() => setChatOpen(true)} className="chat-bubble">
-            <div className="chat-badge" />
-            <MessageSquare size={24} />
-          </div>
-        )}
+        </div>
+
+        <div 
+          onClick={() => setChatOpen(true)} 
+          className={`chat-bubble ${chatOpen ? "chat-bubble-hidden" : ""}`}
+        >
+          <div className="chat-badge" />
+          <MessageSquare size={24} />
+        </div>
       </div>
     </>
   );
