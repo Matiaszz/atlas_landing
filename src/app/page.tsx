@@ -715,12 +715,12 @@ export default function Home() {
                 <h3 className="team-name">Matias</h3>
                 <span className="team-course">Cursando Engenharia de Software na PUC-Campinas</span>
                 <p className="team-desc">
-                  Especialista em criar soluções ponta a ponta robustas. Desenvolve aplicações móveis e desktop nativas com Flutter/Dart, APIs escaláveis com Node.js e Python (Django), além de gerenciar modelagem de dados e infraestrutura AWS/Docker.
+                  Especialista em criar soluções ponta a ponta robustas. Desenvolve aplicações móveis e desktop nativas com Flutter/Dart, APIs escaláveis com Node.js e Java (Spring Boot), além de gerenciar modelagem de dados e infraestrutura AWS/Docker.
                 </p>
                 <div className="team-skills">
                   <span className="tech-pill">Flutter</span>
                   <span className="tech-pill">Node.js</span>
-                  <span className="tech-pill">Python / Django</span>
+                  <span className="tech-pill">Java / Spring Boot</span>
                   <span className="tech-pill">Docker / AWS</span>
                   <span className="tech-pill">PostgreSQL</span>
                 </div>
