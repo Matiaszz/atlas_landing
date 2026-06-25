@@ -8,8 +8,6 @@ import {
   Laptop, 
   Globe, 
   Cpu, 
-  Database, 
-  Sparkles, 
   Code2, 
   MessageSquare, 
   Send, 

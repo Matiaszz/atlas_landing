@@ -1352,3 +1352,8 @@ p {
   background-color: var(--text-muted);
   box-shadow: none;
 }
+
+::selection {
+  background: rgba(157, 85, 255, 0.30); /* cor do fundo ao selecionar */
+  color: white;       /* cor do texto selecionado */
+}

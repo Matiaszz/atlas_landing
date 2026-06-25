@@ -88,7 +88,7 @@ Mensagem do usuário: "${message}"`;
     const fallbackText =
       "Olá! Excelente iniciativa de projeto. Vamos alinhar todos os detalhes diretamente com a equipe no WhatsApp?";
     const fallbackWhatsapp =
-      "Olá Davi e Matias! Vim do site da Atlas NS e gostaria de falar sobre meu projeto.";
+      "Olá Davi e Matias! Vim do site do Atlas NS e gostaria de falar sobre meu projeto.";
     return Response.json({
       text: fallbackText,
       whatsappMessage: fallbackWhatsapp,
