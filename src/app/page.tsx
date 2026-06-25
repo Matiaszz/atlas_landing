@@ -626,7 +626,7 @@ export default function Home() {
                   </div>
                   <div className="stat-group">
                     <span className="stat-label">Time Dedicado</span>
-                    <span className="stat-val">2 Especialistas Seniores</span>
+                    <span className="stat-val">2 Especialistas</span>
                   </div>
                   <div>
                     <span className="stat-label block mb-2">Tecnologias Recomendadas</span>
