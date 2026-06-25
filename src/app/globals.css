@@ -100,7 +100,7 @@ p {
 }
 
 .section-alt {
-  background-color: var(--bg-surface);
+  background-color: rgba(18, 16, 30, 0.75); /* Semi-transparent background to let global grid show through */
   border-top: 1px solid var(--border-subtle);
   border-bottom: 1px solid var(--border-subtle);
 }
@@ -289,13 +289,71 @@ p {
 }
 
 /* Hero Section */
+#hero {
+  height: 100dvh;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: radial-gradient(circle at 50% 30%, rgba(28, 24, 45, 0.45) 0%, var(--bg-base) 100%);
+  padding: 80px 0 0 0; /* Align below navbar */
+}
+
+/* Premium Grid Overlay for background - Static base grid (more visible) */
+.grid-bg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-image: 
+    linear-gradient(rgba(157, 85, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(157, 85, 255, 0.1) 1px, transparent 1px);
+  background-size: 60px 60px; /* Slightly larger cells for better aesthetic balance */
+  background-position: center top;
+  mask-image: radial-gradient(circle 60vw at 50% 50%, black, transparent);
+  -webkit-mask-image: radial-gradient(circle 60vw at 50% 50%, black, transparent);
+  pointer-events: none;
+}
+
+/* Interactive glowing spotlight overlay */
+.grid-bg-overlay-interactive {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-image: 
+    linear-gradient(rgba(157, 85, 255, 0.38) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(157, 85, 255, 0.38) 1px, transparent 1px);
+  background-size: 60px 60px;
+  background-position: center top;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  mask-image: radial-gradient(circle 180px at var(--mouse-x, 0px) var(--mouse-y, 0px), black, transparent);
+  -webkit-mask-image: radial-gradient(circle 180px at var(--mouse-x, 0px) var(--mouse-y, 0px), black, transparent);
+}
+
+.grid-bg-overlay-interactive.active {
+  opacity: 1;
+}
+
 .hero-grid {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   gap: 64px;
   align-items: center;
-  min-height: 70vh;
-  padding: 128px 0 96px; /* Offset the fixed navbar */
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-content {
@@ -470,72 +528,129 @@ p {
   margin-bottom: 16px;
 }
 
-.asymmetric-grid {
+#services {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Ambient purple glow behind bento grid */
+.ambient-purple-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70vw;
+  height: 500px;
+  background: radial-gradient(circle, rgba(157, 85, 255, 0.07) 0%, transparent 70%);
+  filter: blur(100px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Localized dot-grid pattern for sections with solid backgrounds - matching the styling of global-dots-bg exactly */
+.dot-grid-pattern {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1; /* Match stacking position of global-dots-bg */
+  background-image: radial-gradient(rgba(157, 85, 255, 0.08) 1px, transparent 1px); /* Exact copy of global-dots-bg values */
+  background-size: 24px 24px;
+  background-position: center top;
+  background-repeat: repeat;
+  pointer-events: none;
+}
+
+
+
+.bento-grid {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 32px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  position: relative;
+  z-index: 1;
+  margin-top: 48px;
 }
 
-.grid-row-alt {
-  grid-template-columns: 0.8fr 1.2fr;
-  margin-top: 32px;
-}
-
-.grid-card {
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+.bento-card {
+  background-color: #0d0b16; /* deep dark background (almost black) */
+  border: 1px solid rgba(157, 85, 255, 0.08); /* subtle 1px border */
   border-radius: var(--radius-lg);
   padding: 40px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
+  transition: border-color 0.3s ease;
 }
 
-.grid-card:hover {
-  border-color: var(--color-primary-glow);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+.bento-card:hover {
+  border-color: rgba(157, 85, 255, 0.4); /* glowing purple accent border */
 }
 
-.card-icon {
+/* Card layout sizing */
+.card-large {
+  grid-column: span 2;
+}
+
+.card-small {
+  grid-column: span 1;
+}
+
+.bento-card .card-icon {
   width: 48px;
   height: 48px;
-  border-radius: var(--radius-md);
-  background-color: var(--bg-elevated);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-primary);
-  margin-bottom: 32px;
-  border: 1px solid var(--border-subtle);
+  color: var(--color-primary); /* glowing purple icon accent */
+  background: transparent;
+  border: none;
+  margin-bottom: 24px;
+  padding: 0;
 }
 
-.card-title {
-  font-size: 1.5rem;
+.bento-card .card-icon svg {
+  stroke-width: 1.5px;
+  filter: drop-shadow(0 0 6px rgba(157, 85, 255, 0.45)); /* sleek 2D line glow */
+}
+
+.bento-card .card-title {
+  font-size: 1.40rem;
+  font-weight: 700;
+  color: var(--text-primary);
   margin-bottom: 12px;
+  letter-spacing: -0.01em;
 }
 
-.card-desc {
+.bento-card .card-desc {
   font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text-secondary); /* light gray */
   margin-bottom: 24px;
 }
 
-.card-stack {
+.bento-card .card-stack {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-top: auto;
 }
 
-.card-stack-tag {
-  font-size: 0.8rem;
+.bento-card .card-stack-tag {
+  font-size: 0.75rem;
   font-family: var(--font-code);
-  color: var(--text-secondary);
-  background-color: var(--bg-elevated);
+  font-weight: 600;
+  color: #c090ff; /* crisp purple typography */
+  background-color: rgba(157, 85, 255, 0.08); /* 10% opacity purple */
+  border: 1px solid rgba(157, 85, 255, 0.12); /* crisp accent boundaries */
   padding: 4px 10px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-subtle);
+  border-radius: 100px; /* pill-shaped tags */
+  letter-spacing: 0.02em;
 }
 
 /* Interactive Briefing Estimator (Strategic Feature) */
@@ -1302,10 +1417,18 @@ p {
 
 /* Responsive adjustments */
 @media (max-width: 1024px) {
+  #hero {
+    height: auto;
+    min-height: 100dvh;
+    padding-bottom: 64px;
+  }
+
   .hero-grid {
     grid-template-columns: 1fr;
     gap: 48px;
     text-align: center;
+    height: auto;
+    padding: 40px 0;
   }
   
   .hero-content {
@@ -1316,8 +1439,13 @@ p {
     justify-content: center;
   }
   
-  .asymmetric-grid, .grid-row-alt {
+  .bento-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .card-large, .card-small {
+    grid-column: span 1;
   }
   
   .estimator-panel {
@@ -1438,4 +1566,31 @@ p {
 ::selection {
   background: rgba(157, 85, 255, 0.30); /* cor do fundo ao selecionar */
   color: white;       /* cor do texto selecionado */
+}
+
+/* Wrapper to hold all sections below Hero for the global dot background positioning */
+.main-content-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* Global Background Dot Pattern spanning all post-hero sections */
+.global-dots-bg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1; /* Renders in front of section background layers */
+  background-image: radial-gradient(rgba(157, 85, 255, 0.08) 1px, transparent 1px); /* Subtle dot grid pattern */
+  background-size: 24px 24px;
+  background-position: center top;
+  background-repeat: repeat;
+  pointer-events: none;
+}
+
+/* Elevate section contents in front of the global dots background overlay */
+.main-content-wrapper .container {
+  position: relative;
+  z-index: 2;
 }

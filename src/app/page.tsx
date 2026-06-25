@@ -60,6 +60,17 @@ export default function Home() {
   // Sidebar drag-to-resize state and logic
   const [sidebarWidth, setSidebarWidth] = useState<number>(420);
 
+  // Hero section mouse spotlight states
+  const [heroMousePos, setHeroMousePos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [heroHovered, setHeroHovered] = useState<boolean>(false);
+
+  const handleHeroMouseMove = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    setHeroMousePos({ x, y });
+  };
+
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     
@@ -123,7 +134,7 @@ export default function Home() {
         {
           sender: 'agent',
           text: `Olá! Eu sou a Ayla, a assistente comercial inteligente da Atlas NS. No momento, ${statusText} Qual sistema você deseja construir hoje?`,
-          buttons: ['whatsappButton', 'portfolioMatias', 'portfolioDavi'],
+          buttons: ['whatsappButton'],
           whatsappUrl: `https://wa.me/5511995995088?text=${encodeURIComponent("Olá Davi e Matias! Vim do site da Atlas NS e gostaria de iniciar um projeto.")}`
         }
       ]);
@@ -241,9 +252,9 @@ export default function Home() {
 
   // Estimates based on selections
   const getTimelineWeeks = () => {
-    const baseWeeks = 6;
-    const platformMultiplier = selectedPlatforms.length * 3; // 3 weeks per platform since there are only 2 developers
-    const complexityMultiplier = complexity === 1 ? 1 : complexity === 2 ? 1.8 : 3.0;
+    const baseWeeks = 2;
+    const platformMultiplier = selectedPlatforms.length * 1;
+    const complexityMultiplier = complexity === 1 ? 1 : complexity === 2 ? 1.5 : 2.2;
     return Math.round((baseWeeks + platformMultiplier) * complexityMultiplier);
   };
 
@@ -270,7 +281,7 @@ export default function Home() {
   };
 
   const handleCopyToClipboard = () => {
-    const summaryText = `Briefing de Projeto - Atlas NS\nPlataformas: ${selectedPlatforms.map(p => platforms.find(pl => pl.id === p)?.name).join(", ")}\nComplexidade: ${getComplexityLabel()}\nPrazo Estimado: ${getTimelineWeeks()} semanas\nTime Dedicado: 2 Desenvolvedores\nTecnologias Recomendadas: ${getCompiledTech().join(", ")}`;
+    const summaryText = `Briefing de Projeto - Atlas NS\nPlataformas: ${selectedPlatforms.map(p => platforms.find(pl => pl.id === p)?.name).join(", ")}\nComplexidade: ${getComplexityLabel()}\nPrazo Estimado: ${getTimelineWeeks()} semanas\nTecnologias Recomendadas: ${getCompiledTech().join(", ")}`;
     navigator.clipboard.writeText(summaryText);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -346,6 +357,8 @@ export default function Home() {
         </div>
       )}
 
+
+
       {/* Floating/Moving Background Glow Blobs */}
       <div className="glow-blobs-container">
         <div className="glow-blob glow-blob-1" />
@@ -409,7 +422,20 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section id="hero" className="section">
+      <section 
+        id="hero"
+        onMouseMove={handleHeroMouseMove}
+        onMouseEnter={() => setHeroHovered(true)}
+        onMouseLeave={() => setHeroHovered(false)}
+        style={{
+          ...({
+            "--mouse-x": `${heroMousePos.x}px`,
+            "--mouse-y": `${heroMousePos.y}px`,
+          } as React.CSSProperties)
+        }}
+      >
+        <div className="grid-bg-overlay" />
+        <div className={`grid-bg-overlay-interactive ${heroHovered ? "active" : ""}`} />
         <div className="container hero-grid">
           <div className="hero-content">
             <span className="section-eyebrow">Sistemas Sob Demanda</span>
@@ -475,18 +501,24 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Services Section (Asymmetric Modern Layout) */}
-      <section id="services" className="section section-alt">
-        <div className="container">
+      {/* Main Content Wrapper (covers everything below Hero) */}
+      <div className="main-content-wrapper">
+        <div className="global-dots-bg" />
+
+        {/* Services Section (Asymmetric Bento Box Grid Layout) */}
+        <section id="services" className="section section-alt">
+          <div className="ambient-purple-glow" />
+          <div className="dot-grid-pattern" />
+          <div className="container">
           <div className="section-title-wrapper">
             <span className="section-eyebrow">O que desenvolvemos</span>
             <h2 className="section-title">Soluções Digitais sob Medida para sua Empresa</h2>
             <p>Construímos aplicações robustas focadas em estabilidade, facilidade de uso e valor comercial real.</p>
           </div>
 
-          {/* First Asymmetric Row */}
-          <div className="asymmetric-grid">
-            <div className="grid-card">
+          <div className="bento-grid">
+            {/* Card 1: Web (spans 2 columns on desktop) */}
+            <div className="bento-card card-large">
               <div>
                 <div className="card-icon">
                   <Globe size={24} />
@@ -497,63 +529,65 @@ export default function Home() {
                 </p>
               </div>
               <div className="card-stack">
-                <span className="card-stack-tag">Tecnologia Web Moderna</span>
-                <span className="card-stack-tag">Interfaces Responsivas</span>
-                <span className="card-stack-tag">Painéis Administrativos</span>
+                <span className="card-stack-tag">Next.js</span>
+                <span className="card-stack-tag">React</span>
+                <span className="card-stack-tag">Node.js</span>
+                <span className="card-stack-tag">PostgreSQL</span>
               </div>
             </div>
 
-            <div className="grid-card">
+            {/* Card 2: Mobile (spans 1 column on desktop) */}
+            <div className="bento-card card-small">
               <div>
                 <div className="card-icon">
                   <Smartphone size={24} />
                 </div>
-                <h3 className="card-title">Aplicativos para Celular (iOS e Android)</h3>
+                <h3 className="card-title">Aplicativos Móveis</h3>
                 <p className="card-desc">
-                  Garantimos a presença da sua marca no bolso dos seus clientes com aplicativos rápidos, intuitivos e integrados com todos os recursos dos smartphones.
+                  Presença garantida no bolso dos seus clientes com aplicativos nativos iOS e Android rápidos, integrados e otimizados para as lojas.
                 </p>
               </div>
               <div className="card-stack">
-                <span className="card-stack-tag">Notificações Push</span>
-                <span className="card-stack-tag">Câmera e Localização</span>
-                <span className="card-stack-tag">Lojas da Apple & Google</span>
+                <span className="card-stack-tag">Flutter</span>
+                <span className="card-stack-tag">Dart</span>
+                <span className="card-stack-tag">Firebase</span>
               </div>
             </div>
-          </div>
 
-          {/* Second Asymmetric Row */}
-          <div className="asymmetric-grid grid-row-alt">
-            <div className="grid-card">
+            {/* Card 3: Desktop Apps (spans 1 column on desktop) */}
+            <div className="bento-card card-small">
               <div>
                 <div className="card-icon">
                   <Laptop size={24} />
                 </div>
-                <h3 className="card-title">Sistemas Locais para Computadores</h3>
+                <h3 className="card-title">Sistemas Desktop</h3>
                 <p className="card-desc">
-                  Ferramentas focadas em performance extrema e integração com o sistema operacional local. Perfeito para softwares de PDV, painéis e ferramentas de uso diário.
+                  Performance extrema e integrações locais com o sistema operacional para PDVs, totens de atendimento e ferramentas de uso diário.
                 </p>
               </div>
               <div className="card-stack">
+                <span className="card-stack-tag">Flutter</span>
                 <span className="card-stack-tag">Windows</span>
-                <span className="card-stack-tag">macOS</span>
                 <span className="card-stack-tag">Linux</span>
               </div>
             </div>
 
-            <div className="grid-card">
+            {/* Card 4: Cloud & Integrations (spans 2 columns on desktop) */}
+            <div className="bento-card card-large">
               <div>
                 <div className="card-icon">
                   <Cpu size={24} />
                 </div>
-                <h3 className="card-title">Integração de Sistemas & Banco de Dados</h3>
+                <h3 className="card-title">Integrações & Nuvem</h3>
                 <p className="card-desc">
-                  Criamos as conexões necessárias para que seus sistemas atuais conversem entre si de forma segura, organizando seus bancos de dados e garantindo estabilidade nas nuvens AWS ou Google.
+                  Sincronização de sistemas, bancos de dados escaláveis e APIs robustas integradas de forma segura e estável sob arquitetura AWS, Docker ou Firebase.
                 </p>
               </div>
               <div className="card-stack">
-                <span className="card-stack-tag">Segurança Avançada</span>
-                <span className="card-stack-tag">Nuvem AWS / Google</span>
-                <span className="card-stack-tag">Banco de Dados Seguro</span>
+                <span className="card-stack-tag">AWS</span>
+                <span className="card-stack-tag">Docker</span>
+                <span className="card-stack-tag">Node.js</span>
+                <span className="card-stack-tag">APIs REST</span>
               </div>
             </div>
           </div>
@@ -624,10 +658,7 @@ export default function Home() {
                     <span className="stat-label">Prazo Projetado</span>
                     <span className="stat-val">{getTimelineWeeks()} semanas</span>
                   </div>
-                  <div className="stat-group">
-                    <span className="stat-label">Time Dedicado</span>
-                    <span className="stat-val">2 Desenvolvedores</span>
-                  </div>
+
                   <div>
                     <span className="stat-label block mb-2">Tecnologias Recomendadas</span>
                     <div className="stat-tech-stack">
@@ -676,7 +707,7 @@ export default function Home() {
             <div className="team-card">
               <div className="team-avatar-wrapper">
                 <Image 
-                  src="/davi.jpg" 
+                  src="/davi.png" 
                   alt="Davi - Lead Frontend & UI/UX" 
                   fill 
                   style={{ objectFit: 'cover' }}
@@ -686,7 +717,6 @@ export default function Home() {
               <div className="team-info">
                 <span className="team-role">Frontend & Design UI/UX</span>
                 <h3 className="team-name">Davi</h3>
-                <span className="team-course">Cursando Engenharia de Software na FIAP</span>
                 <p className="team-desc">
                   Especialista em criar layouts modernos, responsivos e dinâmicos. Trabalha com Next.js, React e React Native para garantir que a interface seja fluida, elegante e focada na conversão de leads.
                 </p>
@@ -713,7 +743,6 @@ export default function Home() {
               <div className="team-info">
                 <span className="team-role">Desenvolvedor Fullstack</span>
                 <h3 className="team-name">Matias</h3>
-                <span className="team-course">Cursando Engenharia de Software na PUC-Campinas</span>
                 <p className="team-desc">
                   Especialista em criar soluções ponta a ponta robustas. Desenvolve aplicações móveis e desktop nativas com Flutter/Dart, APIs escaláveis com Node.js e Java (Spring Boot), além de gerenciar modelagem de dados e infraestrutura AWS/Docker.
                 </p>
@@ -797,20 +826,21 @@ export default function Home() {
           </div>
         </div>
       </section>
+    </div>
 
-      {/* Footer */}
-      <footer className="footer">
-        <div className="container footer-container">
-          <div>
-            <p className="text-xs">© {new Date().getFullYear()} Atlas NS. Todos os direitos reservados. CNPJ: 00.000.000/0001-00</p>
-          </div>
-          <div>
-            <p className="text-xs">
-              Interface em conformidade com as diretrizes de acessibilidade e performance técnica de carregamento rápido.
-            </p>
-          </div>
+    {/* Footer */}
+    <footer className="footer">
+      <div className="container footer-container">
+        <div>
+          <p className="text-xs">© {new Date().getFullYear()} Atlas NS. Todos os direitos reservados.</p>
         </div>
-      </footer>
+        <div>
+          <p className="text-xs">
+            Interface em conformidade com as diretrizes de acessibilidade e performance técnica de carregamento rápido.
+          </p>
+        </div>
+      </div>
+    </footer>
 
       {/* Floating WhatsApp Widget */}
       <div className="chat-widget">
@@ -857,34 +887,6 @@ export default function Home() {
                               className="chat-cta-btn btn-success-chat"
                             >
                               Conversar com os Devs no WhatsApp
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
-                            </a>
-                          );
-                        }
-                        if (btnType === "portfolioMatias") {
-                          return (
-                            <a 
-                              key={btnType}
-                              href="https://allanmatias.vercel.app" 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="chat-cta-btn btn-secondary-chat"
-                            >
-                              Ver Portfólio do Matias
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
-                            </a>
-                          );
-                        }
-                        if (btnType === "portfolioDavi") {
-                          return (
-                            <a 
-                              key={btnType}
-                              href="https://github.com/davibalieiro" 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="chat-cta-btn btn-secondary-chat"
-                            >
-                              Ver GitHub do Davi
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
                             </a>
                           );
