@@ -14,7 +14,9 @@ import {
   Send, 
   X, 
   ChevronRight, 
-  CheckCircle2 
+  CheckCircle2,
+  ChevronDown,
+  Cog
 } from "lucide-react";
 
 // Platform Type
@@ -34,10 +36,37 @@ export default function Home() {
   // State for active navbar section
   const [activeSection, setActiveSection] = useState<string>("hero");
 
-  // State for application configuration estimator
-  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(["web"]);
-  const [complexity, setComplexity] = useState<number>(2); // 1 = MVP, 2 = Core, 3 = Scaled Enterprise
-  const [copied, setCopied] = useState<boolean>(false);
+  // FAQ accordion active state
+  const [activeFaq, setActiveFaq] = useState<number | null>(null);
+
+  // Contact Form states
+  const [contactName, setContactName] = useState<string>("");
+  const [contactProjectType, setContactProjectType] = useState<string>("website");
+  const [contactDescription, setContactDescription] = useState<string>("");
+
+  // FAQ static data
+  const faqItems = [
+    {
+      question: "Como funciona o processo de desenvolvimento de vocês?",
+      answer: "Nós trabalhamos de forma ágil e transparente. O projeto é estruturado em entregas semanais, onde você homologa telas funcionais e acompanha o progresso em tempo real, sem surpresas no final."
+    },
+    {
+      question: "Quanto tempo leva para o meu projeto ficar pronto?",
+      answer: "O prazo depende da complexidade do projeto. MVPs de validação rápida costumam levar entre 3 a 5 semanas, enquanto plataformas web e sistemas corporativos complexos podem levar de 8 a 12 semanas."
+    },
+    {
+      question: "Vocês dão suporte após o lançamento do software?",
+      answer: "Com certeza! Oferecemos garantia completa de correção de bugs após o lançamento e planos flexíveis de suporte, manutenção e evolução contínua para acompanhar o crescimento do seu negócio."
+    },
+    {
+      question: "Eu terei acesso ao código-fonte do meu projeto?",
+      answer: "Sim, 100%. Todo o código-fonte desenvolvido pertence integralmente à sua empresa. Compartilhamos o repositório no GitHub desde o primeiro dia, garantindo total transparência e propriedade intelectual."
+    },
+    {
+      question: "Quais tecnologias vocês utilizam no desenvolvimento?",
+      answer: "Utilizamos stacks modernas de altíssimo desempenho: Next.js/React para plataformas web, Flutter para aplicativos móveis nativos (iOS e Android), Node.js/Java para APIs robustas e escaláveis, e infraestrutura em nuvem com AWS e Docker."
+    }
+  ];
 
   // Live chat states
   const [chatOpen, setChatOpen] = useState<boolean>(false);
@@ -133,9 +162,9 @@ export default function Home() {
       setChatMessages([
         {
           sender: 'agent',
-          text: `Olá! Eu sou a Ayla, a assistente comercial inteligente da Atlas NS. No momento, ${statusText} Qual sistema você deseja construir hoje?`,
+          text: `Olá! Eu sou a Ayla, a assistente comercial inteligente da Atlas. No momento, ${statusText} Qual sistema você deseja construir hoje?`,
           buttons: ['whatsappButton'],
-          whatsappUrl: `https://wa.me/5511995995088?text=${encodeURIComponent("Olá Davi e Matias! Vim do site da Atlas NS e gostaria de iniciar um projeto.")}`
+          whatsappUrl: `https://wa.me/5511995995088?text=${encodeURIComponent("Olá Davi e Matias! Vim do site da Atlas e gostaria de iniciar um projeto.")}`
         }
       ]);
     }, 0);
@@ -195,7 +224,7 @@ export default function Home() {
 
   // Active navigation tracker
   useEffect(() => {
-    const sections = ["hero", "services", "estimator", "team", "principles", "contact"];
+    const sections = ["hero", "services", "team", "principles", "faq", "contact"];
     
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
@@ -233,58 +262,29 @@ export default function Home() {
     };
   }, []);
 
-  const platforms: Platform[] = [
-    { id: "web", name: "Sistemas Web", icon: <Globe size={20} />, tech: ["Next.js", "Node.js", "PostgreSQL"] },
-    { id: "android", name: "Aplicativo Android", icon: <Smartphone size={20} />, tech: ["Flutter", "Dart", "Firebase"] },
-    { id: "ios", name: "Aplicativo iOS", icon: <Smartphone size={20} />, tech: ["Flutter", "Dart", "Firebase"] },
-    { id: "windows", name: "Aplicativo Windows", icon: <Laptop size={20} />, tech: ["Flutter", "Dart"] },
-    { id: "linux", name: "Sistemas Linux", icon: <Terminal size={20} />, tech: ["Flutter", "Dart"] },
-    { id: "cloud", name: "Integrações & Nuvem", icon: <Cpu size={20} />, tech: ["AWS", "Docker", "Node.js"] }
-  ];
-
-  const handlePlatformToggle = (id: string) => {
-    setSelectedPlatforms(prev => 
-      prev.includes(id) 
-        ? (prev.length > 1 ? prev.filter(p => p !== id) : prev) // keep at least one
-        : [...prev, id]
-    );
-  };
-
-  // Estimates based on selections
-  const getTimelineWeeks = () => {
-    const baseWeeks = 2;
-    const platformMultiplier = selectedPlatforms.length * 1;
-    const complexityMultiplier = complexity === 1 ? 1 : complexity === 2 ? 1.5 : 2.2;
-    return Math.round((baseWeeks + platformMultiplier) * complexityMultiplier);
-  };
-
-  const getComplexityLabel = () => {
-    if (complexity === 1) return "Lançamento Rápido (M.V.P)";
-    if (complexity === 2) return "Produto Completo de Alta Performance";
-    return "Arquitetura Corporativa de Larga Escala";
-  };
-
-  const getCompiledTech = () => {
-    const techSet = new Set<string>();
-    selectedPlatforms.forEach(pId => {
-      const p = platforms.find(pl => pl.id === pId);
-      if (p) p.tech.forEach(t => techSet.add(t));
-    });
-    return Array.from(techSet);
-  };
-
   const handleWhatsAppRedirect = (customMsg?: string) => {
-    const baseText = customMsg || `Olá Atlas NS! Gostaria de fazer um orçamento comercial para um software sob demanda nas seguintes plataformas: ${selectedPlatforms.map(p => platforms.find(pl => pl.id === p)?.name).join(", ")}. Nível de complexidade desejado: ${getComplexityLabel()}.`;
+    const baseText = customMsg || "Olá Atlas! Gostaria de fazer um orçamento comercial para um software sob demanda para minha empresa.";
     const encodedText = encodeURIComponent(baseText);
-    const phoneNumber = "5511995995088"; // Updated commercial phone number
+    const phoneNumber = "5511995995088";
     window.open(`https://wa.me/${phoneNumber}?text=${encodedText}`, "_blank", "noopener,noreferrer");
   };
 
-  const handleCopyToClipboard = () => {
-    const summaryText = `Briefing de Projeto - Atlas NS\nPlataformas: ${selectedPlatforms.map(p => platforms.find(pl => pl.id === p)?.name).join(", ")}\nComplexidade: ${getComplexityLabel()}\nPrazo Estimado: ${getTimelineWeeks()} semanas\nTecnologias Recomendadas: ${getCompiledTech().join(", ")}`;
-    navigator.clipboard.writeText(summaryText);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    let projectTypeLabel = "";
+    if (contactProjectType === "website") projectTypeLabel = "Website / Plataforma Web";
+    else if (contactProjectType === "mobile") projectTypeLabel = "Aplicativo Mobile (iOS & Android)";
+    else if (contactProjectType === "desktop") projectTypeLabel = "Aplicativo Desktop";
+    else if (contactProjectType === "API") projectTypeLabel = "API / Integração / Backend";
+
+    let message = `Olá Atlas! Me chamo ${contactName}. Gostaria de solicitar um orçamento comercial para um projeto do tipo: ${projectTypeLabel}.`;
+    
+    if (contactDescription.trim()) {
+      message += `\n\nDetalhes do projeto:\n${contactDescription.trim()}`;
+    }
+    
+    handleWhatsAppRedirect(message);
   };
 
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -337,7 +337,7 @@ export default function Home() {
       setChatMessages(prev => [...prev, { 
         sender: 'agent', 
         text: "Tive um problema de conexão rápida com meu servidor Gemini, mas você pode chamar a dupla diretamente no WhatsApp!",
-        whatsappUrl: `https://wa.me/5511995995088?text=${encodeURIComponent("Olá Davi e Matias! Vim do chat da Atlas NS e gostaria de falar sobre meu projeto.")}`,
+        whatsappUrl: `https://wa.me/5511995995088?text=${encodeURIComponent("Olá Davi e Matias! Vim do chat da Atlas e gostaria de falar sobre meu projeto.")}`,
         buttons: ["whatsappButton"]
       }]);
     } finally {
@@ -370,12 +370,12 @@ export default function Home() {
         <div className="container nav-container">
           <a href="#hero" className="logo">
             <AtlasLogo size={32} />
-            <span>Atlas NS</span>
+            <span>Atlas</span>
             <span className="logo-divider">/</span>
             <span key={activeSection} className="logo-section">
               {activeSection === "hero" && "Início"}
               {activeSection === "services" && "Serviços"}
-              {activeSection === "estimator" && "Simulador"}
+              {activeSection === "faq" && "FAQ"}
               {activeSection === "team" && "Quem Somos"}
               {activeSection === "principles" && "Diferenciais"}
               {activeSection === "contact" && "Contato"}
@@ -389,11 +389,6 @@ export default function Home() {
                 </a>
               </li>
               <li>
-                <a href="#estimator" className={`nav-link ${activeSection === "estimator" ? "active" : ""}`}>
-                  Simulador
-                </a>
-              </li>
-              <li>
                 <a href="#team" className={`nav-link ${activeSection === "team" ? "active" : ""}`}>
                   Quem Somos
                 </a>
@@ -401,6 +396,11 @@ export default function Home() {
               <li>
                 <a href="#principles" className={`nav-link ${activeSection === "principles" ? "active" : ""}`}>
                   Diferenciais
+                </a>
+              </li>
+              <li>
+                <a href="#faq" className={`nav-link ${activeSection === "faq" ? "active" : ""}`}>
+                  FAQ
                 </a>
               </li>
               <li>
@@ -453,8 +453,8 @@ export default function Home() {
                 Falar com Especialista no WhatsApp
                 <ChevronRight size={18} />
               </button>
-              <a href="#estimator" className="btn btn-secondary">
-                Simular Escopo do Projeto
+              <a href="#contact" className="btn btn-secondary">
+                Solicitar Orçamento
               </a>
             </div>
           </div>
@@ -479,21 +479,18 @@ export default function Home() {
                     <Globe size={18} className="stack-item-icon" />
                     <span className="stack-item-name">Plataformas Web</span>
                   </div>
-                  <span className="stack-item-tag">Sistemas Web & SaaS</span>
                 </div>
                 <div className="stack-item">
                   <div className="stack-item-left">
                     <Smartphone size={18} className="stack-item-icon" />
                     <span className="stack-item-name">Celulares iOS & Android</span>
                   </div>
-                  <span className="stack-item-tag">Aplicativos Nativos</span>
                 </div>
                 <div className="stack-item">
                   <div className="stack-item-left">
                     <Laptop size={18} className="stack-item-icon" />
                     <span className="stack-item-name">Sistemas para Computadores</span>
-                  </div>
-                  <span className="stack-item-tag">Windows, Linux & Mac</span>
+                  </div>  
                 </div>
               </div>
             </div>
@@ -508,7 +505,6 @@ export default function Home() {
         {/* Services Section (Asymmetric Bento Box Grid Layout) */}
         <section id="services" className="section section-alt">
           <div className="ambient-purple-glow" />
-          <div className="dot-grid-pattern" />
           <div className="container">
           <div className="section-title-wrapper">
             <span className="section-eyebrow">O que desenvolvemos</span>
@@ -516,185 +512,120 @@ export default function Home() {
             <p>Construímos aplicações robustas focadas em estabilidade, facilidade de uso e valor comercial real.</p>
           </div>
 
-          <div className="bento-grid">
-            {/* Card 1: Web (spans 2 columns on desktop) */}
-            <div className="bento-card card-large">
-              <div>
-                <div className="card-icon">
-                  <Globe size={24} />
-                </div>
-                <h3 className="card-title">Plataformas Web & Portais de Venda</h3>
-                <p className="card-desc">
-                  Sistemas corporativos e portais de alta performance para automatizar seus processos operacionais, gerenciar vendas ou oferecer serviços de forma 100% online e integrada.
-                </p>
-              </div>
-              <div className="card-stack">
-                <span className="card-stack-tag">Next.js</span>
-                <span className="card-stack-tag">React</span>
-                <span className="card-stack-tag">Node.js</span>
-                <span className="card-stack-tag">PostgreSQL</span>
-              </div>
-            </div>
-
-            {/* Card 2: Mobile (spans 1 column on desktop) */}
-            <div className="bento-card card-small">
-              <div>
-                <div className="card-icon">
-                  <Smartphone size={24} />
-                </div>
-                <h3 className="card-title">Aplicativos Móveis</h3>
-                <p className="card-desc">
-                  Presença garantida no bolso dos seus clientes com aplicativos nativos iOS e Android rápidos, integrados e otimizados para as lojas.
-                </p>
-              </div>
-              <div className="card-stack">
-                <span className="card-stack-tag">Flutter</span>
-                <span className="card-stack-tag">Dart</span>
-                <span className="card-stack-tag">Firebase</span>
-              </div>
-            </div>
-
-            {/* Card 3: Desktop Apps (spans 1 column on desktop) */}
-            <div className="bento-card card-small">
-              <div>
-                <div className="card-icon">
-                  <Laptop size={24} />
-                </div>
-                <h3 className="card-title">Sistemas Desktop</h3>
-                <p className="card-desc">
-                  Performance extrema e integrações locais com o sistema operacional para PDVs, totens de atendimento e ferramentas de uso diário.
-                </p>
-              </div>
-              <div className="card-stack">
-                <span className="card-stack-tag">Flutter</span>
-                <span className="card-stack-tag">Windows</span>
-                <span className="card-stack-tag">Linux</span>
-              </div>
-            </div>
-
-            {/* Card 4: Cloud & Integrations (spans 2 columns on desktop) */}
-            <div className="bento-card card-large">
-              <div>
-                <div className="card-icon">
-                  <Cpu size={24} />
-                </div>
-                <h3 className="card-title">Integrações & Nuvem</h3>
-                <p className="card-desc">
-                  Sincronização de sistemas, bancos de dados escaláveis e APIs robustas integradas de forma segura e estável sob arquitetura AWS, Docker ou Firebase.
-                </p>
-              </div>
-              <div className="card-stack">
-                <span className="card-stack-tag">AWS</span>
-                <span className="card-stack-tag">Docker</span>
-                <span className="card-stack-tag">Node.js</span>
-                <span className="card-stack-tag">APIs REST</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Interactive Platform Briefing Selector */}
-      <section id="estimator" className="section">
-        <div className="container">
-          <div className="section-title-wrapper">
-            <span className="section-eyebrow">Simulador de Projeto</span>
-            <h2 className="section-title">Configure sua Ideia em Tempo Real</h2>
-            <p>Selecione as plataformas onde seu software deve rodar e o nível de robustez desejado para ver uma estimativa de prazo.</p>
-          </div>
-
-          <div className="estimator-panel">
-            <div className="estimator-config">
-              <div>
-                <h3 className="estimator-title">Onde seu sistema deve funcionar?</h3>
-                <p className="estimator-subtitle">Você pode selecionar múltiplas opções</p>
-              </div>
-              
-              <div className="platform-grid">
-                {platforms.map(p => (
-                  <div 
-                    key={p.id}
-                    onClick={() => handlePlatformToggle(p.id)}
-                    className={`platform-checkbox ${selectedPlatforms.includes(p.id) ? "active" : ""}`}
-                  >
-                    <div className="checkbox-indicator">
-                      {selectedPlatforms.includes(p.id) && <CheckCircle2 size={12} className="checkbox-check" />}
-                    </div>
-                    {p.icon}
-                    <span className="platform-checkbox-text">{p.name}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="complexity-control">
-                <div className="complexity-labels">
-                  <span>Robustez e Complexidade</span>
-                  <span className="text-primary font-semibold">{getComplexityLabel()}</span>
-                </div>
-                <input 
-                  type="range"
-                  min="1"
-                  max="3"
-                  value={complexity}
-                  onChange={(e) => setComplexity(parseInt(e.target.value))}
-                  className="complexity-slider"
-                />
-                <div className="complexity-labels text-xs text-zinc-500">
-                  <span>Validação Rápida</span>
-                  <span>Produto Completo</span>
-                  <span>Escalabilidade Máxima</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="estimator-output">
-              <div>
-                <div className="output-title">
-                  <Terminal size={14} />
-                  Resumo das Especificações
-                </div>
-                <div className="output-stats">
-                  <div className="stat-group">
-                    <span className="stat-label">Prazo Projetado</span>
-                    <span className="stat-val">{getTimelineWeeks()} semanas</span>
-                  </div>
-
+          <div className="services-split-layout">
+            <div className="services-left-col">
+              <div className="bento-grid">
+                {/* Card 1: Web (spans 2 columns on desktop) */}
+                <div className="bento-card card-large">
                   <div>
-                    <span className="stat-label block mb-2">Tecnologias Recomendadas</span>
-                    <div className="stat-tech-stack">
-                      {getCompiledTech().map(t => (
-                        <span key={t} className="tech-pill">{t}</span>
-                      ))}
+                    <div className="card-icon">
+                      <Globe size={24} />
                     </div>
+                    <h3 className="card-title">Plataformas Web & Portais de Venda</h3>
+                    <p className="card-desc">
+                      Sistemas corporativos e portais de alta performance para automatizar seus processos operacionais, gerenciar vendas ou oferecer serviços de forma 100% online e integrada.
+                    </p>
+                  </div>
+                  <div className="card-stack">
+                    <span className="card-stack-tag">Next.js</span>
+                    <span className="card-stack-tag">React</span>
+                    <span className="card-stack-tag">Node.js</span>
+                    <span className="card-stack-tag">PostgreSQL</span>
+                  </div>
+                </div>
+
+                {/* Card 2: Mobile (spans 1 column on desktop) */}
+                <div className="bento-card card-small">
+                  <div>
+                    <div className="card-icon">
+                      <Smartphone size={24} />
+                    </div>
+                    <h3 className="card-title">Aplicativos Móveis</h3>
+                    <p className="card-desc">
+                      Presença garantida no bolso dos seus clientes com aplicativos nativos iOS e Android rápidos, integrados e otimizados para as lojas.
+                    </p>
+                  </div>
+                  <div className="card-stack">
+                    <span className="card-stack-tag">Flutter</span>
+                    <span className="card-stack-tag">Dart</span>
+                    <span className="card-stack-tag">Firebase</span>
+                  </div>
+                </div>
+
+                {/* Card 3: Desktop Apps (spans 1 column on desktop) */}
+                <div className="bento-card card-small">
+                  <div>
+                    <div className="card-icon">
+                      <Laptop size={24} />
+                    </div>
+                    <h3 className="card-title">Sistemas Desktop</h3>
+                    <p className="card-desc">
+                      Performance extrema e integrações locais com o sistema operacional para PDVs, totens de atendimento e ferramentas de uso diário.
+                    </p>
+                  </div>
+                  <div className="card-stack">
+                    <span className="card-stack-tag">Flutter</span>
+                    <span className="card-stack-tag">Windows</span>
+                    <span className="card-stack-tag">Linux</span>
+                  </div>
+                </div>
+
+                {/* Card 4: Cloud & Integrations (spans 2 columns on desktop) */}
+                <div className="bento-card card-large">
+                  <div>
+                    <div className="card-icon">
+                      <Cpu size={24} />
+                    </div>
+                    <h3 className="card-title">Integrações & Nuvem</h3>
+                    <p className="card-desc">
+                      Sincronização de sistemas, bancos de dados escaláveis e APIs robustas integradas de forma segura e estável sob arquitetura AWS, Docker ou Firebase.
+                    </p>
+                  </div>
+                  <div className="card-stack">
+                    <span className="card-stack-tag">AWS</span>
+                    <span className="card-stack-tag">Docker</span>
+                    <span className="card-stack-tag">Node.js</span>
+                    <span className="card-stack-tag">APIs REST</span>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '16px' }}>
-                <button 
-                  onClick={() => handleWhatsAppRedirect()}
-                  className="btn btn-success"
-                  style={{ width: "100%" }}
-                >
-                  Enviar Simulação no WhatsApp
-                  <ChevronRight size={18} />
-                </button>
-                <button 
-                  onClick={handleCopyToClipboard}
-                  className="btn btn-copy"
-                  style={{ width: "100%" }}
-                >
-                  {copied ? "Copiado!" : "Copiar Resumo"}
-                  {copied ? <CheckCircle2 size={16} /> : <Code2 size={16} />}
-                </button>
+            <div className="services-right-col">
+              <div className="gears-container">
+                {/* Ambient Glows */}
+                <div className="gear-glow-bg" />
+                <div className="gear-glow-secondary" />
+
+                {/* Dashed Orbit Rings */}
+                <div className="gear-orbit-ring" />
+                <div className="gear-orbit-ring-dashed" />
+
+                {/* Floating Tech Particles */}
+                <div className="gear-particle gear-particle-1" />
+                <div className="gear-particle gear-particle-2" />
+                <div className="gear-particle gear-particle-3" />
+
+                {/* Three Rotating Gears */}
+                <div className="gear-wrapper gear-wrapper-large">
+                  <Cog className="gear-icon gear-large-icon" />
+                </div>
+                <div className="gear-wrapper gear-wrapper-medium">
+                  <Cog className="gear-icon gear-medium-icon" />
+                </div>
+                <div className="gear-wrapper gear-wrapper-small">
+                  <Cog className="gear-icon gear-small-icon" />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* FAQ was moved down */}
 
       {/* The 2 Developers Profile Section */}
-      <section id="team" className="section section-alt">
+      <section id="team" className="section">
         <div className="container">
           <div className="section-title-wrapper">
             <span className="section-eyebrow">Quem Desenvolve Seu Projeto</span>
@@ -710,7 +641,7 @@ export default function Home() {
                   src="/davi.png" 
                   alt="Davi - Lead Frontend & UI/UX" 
                   fill 
-                  style={{ objectFit: 'cover' }}
+                  className="team-avatar-img"
                   sizes="(max-width: 768px) 140px, 140px"
                 />
               </div>
@@ -736,7 +667,7 @@ export default function Home() {
                   src="/matias.png" 
                   alt="Matias - Desenvolvedor Fullstack" 
                   fill 
-                  style={{ objectFit: 'cover' }}
+                  className="team-avatar-img"
                   sizes="(max-width: 768px) 140px, 140px"
                 />
               </div>
@@ -760,7 +691,7 @@ export default function Home() {
       </section>
 
       {/* Difference / Principles (No generic lists) */}
-      <section id="principles" className="section">
+      <section id="principles" className="section section-alt">
         <div className="container">
           <div className="section-title-wrapper">
             <span className="section-eyebrow">Diferenciais Clave</span>
@@ -794,6 +725,43 @@ export default function Home() {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <section id="faq" className="section">
+        <div className="container">
+          <div className="section-title-wrapper">
+            <span className="section-eyebrow">Dúvidas Frequentes</span>
+            <h2 className="section-title">Perguntas Mais Comuns</h2>
+            <p>Esclareça suas principais dúvidas sobre como trabalhamos, prazos e tecnologia.</p>
+          </div>
+
+          <div className="faq-wrapper">
+            {faqItems.map((item, index) => {
+              const isOpen = activeFaq === index;
+              return (
+                <div 
+                  key={index} 
+                  className={`faq-item ${isOpen ? "active" : ""}`}
+                >
+                  <button 
+                    onClick={() => setActiveFaq(isOpen ? null : index)}
+                    className="faq-question"
+                    aria-expanded={isOpen}
+                  >
+                    <span>{item.question}</span>
+                    <ChevronDown size={18} className="faq-icon" />
+                  </button>
+                  <div className="faq-answer">
+                    <div className="faq-answer-content">
+                      <p>{item.answer}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* Final Conversion Section */}
       <section id="contact" className="section section-alt">
         <div className="container">
@@ -804,14 +772,7 @@ export default function Home() {
               <p>
                 Conecte-se com nossa equipe de desenvolvedores agora para esclarecer dúvidas e receber um escopo inicial com estimativa de investimento.
               </p>
-            </div>
-            <div className="cta-action">
-              <button 
-                onClick={() => handleWhatsAppRedirect()}
-                className="btn btn-success"
-              >
-                Falar com a Equipe no WhatsApp
-              </button>
+              
               <div className="cta-benefits">
                 <div className="cta-benefit">
                   <CheckCircle2 size={14} className="cta-benefit-icon" />
@@ -821,7 +782,71 @@ export default function Home() {
                   <CheckCircle2 size={14} className="cta-benefit-icon" />
                   <span>Código sob medida para sua operação</span>
                 </div>
+                <div className="cta-benefit">
+                  <CheckCircle2 size={14} className="cta-benefit-icon" />
+                  <span>Sem intermediários ou burocracia</span>
+                </div>
               </div>
+            </div>
+
+            <div className="cta-action">
+              <form onSubmit={handleFormSubmit} className="cta-form">
+                <div className="form-group">
+                  <label htmlFor="contact-name" className="form-label">Seu Nome</label>
+                  <input 
+                    type="text"
+                    id="contact-name"
+                    name="name"
+                    placeholder="Como gostaria de ser chamado?"
+                    value={contactName}
+                    onChange={(e) => setContactName(e.target.value)}
+                    className="form-input"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Tipo de Projeto</label>
+                  <div className="project-type-selector">
+                    {[
+                      { id: "website", label: "Website / Web" },
+                      { id: "mobile", label: "Mobile (App)" },
+                      { id: "desktop", label: "Desktop" },
+                      { id: "API", label: "API / Backend" }
+                    ].map((type) => (
+                      <button
+                        key={type.id}
+                        type="button"
+                        onClick={() => setContactProjectType(type.id)}
+                        className={`type-chip ${contactProjectType === type.id ? "active" : ""}`}
+                      >
+                        {type.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="contact-description" className="form-label">Conte um pouco mais (opcional)</label>
+                  <textarea 
+                    id="contact-description"
+                    name="description"
+                    placeholder="Quais são as principais ideias ou objetivos do projeto?"
+                    value={contactDescription}
+                    onChange={(e) => setContactDescription(e.target.value)}
+                    className="form-textarea"
+                    rows={3}
+                  />
+                </div>
+
+                <button 
+                  type="submit"
+                  className="btn btn-success form-submit-btn"
+                >
+                  Falar com a Equipe no WhatsApp
+                  <ChevronRight size={18} />
+                </button>
+              </form>
             </div>
           </div>
         </div>
@@ -830,13 +855,57 @@ export default function Home() {
 
     {/* Footer */}
     <footer className="footer">
-      <div className="container footer-container">
-        <div>
-          <p className="text-xs">© {new Date().getFullYear()} Atlas NS. Todos os direitos reservados.</p>
+      <div className="container footer-content">
+        <div className="footer-brand-col">
+          <div className="footer-logo">
+            <AtlasLogo size={24} />
+            <span>Atlas</span>
+          </div>
+          <p className="footer-tagline">
+            Desenvolvimento ágil e de alta performance para sistemas sob demanda. Sem intermediários, trabalhando diretamente com os engenheiros fundadores do início ao fim.
+          </p>
         </div>
-        <div>
+
+        <div className="footer-links-col">
+          <h4 className="footer-col-title">Navegação</h4>
+          <ul className="footer-links">
+            <li><a href="#services">Serviços</a></li>
+            <li><a href="#team">Quem Somos</a></li>
+            <li><a href="#principles">Diferenciais</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#contact">Contato</a></li>
+          </ul>
+        </div>
+
+        <div className="footer-contact-col">
+          <h4 className="footer-col-title">Contato & Suporte</h4>
+          <ul className="footer-contact-info">
+            <li>
+              <span className="info-label">WhatsApp Comercial:</span>
+              <a href="https://wa.me/5511995995088" target="_blank" rel="noopener noreferrer" className="footer-contact-link">
+                +55 (11) 99599-5088
+              </a>
+            </li>
+            <li>
+              <span className="info-label">E-mail:</span>
+              <span className="footer-text">contato@atlasns.com</span>
+            </li>
+            <li>
+              <span className="info-label">Operação:</span>
+              <span className="footer-text">São Paulo - SP, Brasil</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="container footer-bottom">
+        <div className="footer-divider" />
+        <div className="footer-bottom-wrapper">
           <p className="text-xs">
-            Interface em conformidade com as diretrizes de acessibilidade e performance técnica de carregamento rápido.
+            © {new Date().getFullYear()} Atlas. Todos os direitos reservados.
+          </p>
+          <p className="text-xs footer-compliance">
+            Código 100% de propriedade do cliente. Interface em total conformidade com diretrizes de acessibilidade e performance de carregamento rápido.
           </p>
         </div>
       </div>
@@ -857,7 +926,7 @@ export default function Home() {
             <div className="chat-header-info">
               <AtlasLogo></AtlasLogo>
               <div className="chat-header-text">
-                <h4>Ayla | Atlas NS</h4>
+                <h4>Ayla | Atlas</h4>
                 <p>{isOnline ? "Online para suporte comercial" : "Fora do horário comercial (08h às 16h)"}</p>
               </div>
             </div>
@@ -868,14 +937,14 @@ export default function Home() {
 
           <div className="chat-body">
             {chatMessages.map((msg, i) => (
-              <div key={i} className="chat-message-wrapper" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+              <div key={i} className="chat-message-wrapper">
                 <div 
                   className={`chat-msg ${msg.sender === 'agent' ? 'chat-msg-received' : 'chat-msg-sent'}`}
                 >
                   {msg.text}
                   
                   {msg.buttons && msg.buttons.length > 0 && (
-                    <div className="chat-buttons-container" style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '12px' }}>
+                    <div className="chat-buttons-container">
                       {msg.buttons.map(btnType => {
                         if (btnType === "whatsappButton" && msg.whatsappUrl) {
                           return (
@@ -899,11 +968,11 @@ export default function Home() {
               </div>
             ))}
             {chatIsTyping && (
-              <div className="chat-msg chat-msg-received" style={{ display: 'flex', flexDirection: 'column', gap: '6px', opacity: 0.9 }}>
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+              <div className="chat-msg chat-msg-received chat-msg-typing">
+                <span className="chat-typing-status">
                   {typingText}
                 </span>
-                <div className="typing-indicator" style={{ display: 'flex', gap: '4px', padding: '4px 0' }}>
+                <div className="chat-typing-indicator">
                   <span></span>
                   <span></span>
                   <span></span>
@@ -915,27 +984,24 @@ export default function Home() {
           </div>
 
           <div className="chat-footer">
-            <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: '8px' }}>
+            <form onSubmit={handleSendMessage} className="chat-footer-form">
               <input 
                 type="text" 
+                id="chat-message-input"
+                name="chatMessage"
+                title="Escreva sua mensagem"
+                aria-label="Escreva sua mensagem"
                 placeholder="Escreva sua mensagem..."
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
-                style={{ 
-                  flex: 1, 
-                  padding: '8px 12px', 
-                  borderRadius: 'var(--radius-sm)', 
-                  border: '1px solid var(--border-subtle)',
-                  backgroundColor: 'var(--bg-base)',
-                  color: 'var(--text-primary)',
-                  fontSize: '0.85rem'
-                }}
+                className="chat-footer-input"
               />
               <button 
                 type="submit"
-                className="btn btn-primary"
-                style={{ padding: '8px 16px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                className="btn btn-primary chat-footer-btn"
                 disabled={chatIsTyping}
+                title="Enviar mensagem"
+                aria-label="Enviar mensagem"
               >
                 <Send size={14} />
               </button>

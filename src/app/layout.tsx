@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Atlas NS | Engenharia de Software sob Demanda (Web, Mobile, Desktop)",
+  title: "Atlas | Engenharia de Software sob Demanda (Web, Mobile, Desktop)",
   description: "Desenvolvemos aplicações web, mobile e desktop customizadas com foco em alta performance, código limpo e conversão. Fale com um especialista e faça seu briefing.",
 };
 

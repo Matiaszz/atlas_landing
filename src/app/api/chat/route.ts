@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
       // Mock response if no API key is provided
       const mockText = `Olá! Somos uma equipe focada em entregas diretas e ágeis. Eu (Matias) cuido do Fullstack/Flutter e o Davi comanda o Frontend/UI. Vamos falar sobre seu projeto diretamente no WhatsApp!`;
 
-      const mockWhatsapp = `Olá Davi e Matias! Vim do site da Atlas NS e gostaria de conversar sobre o desenvolvimento do meu sistema. Minha ideia é: "${message}"`;
+      const mockWhatsapp = `Olá Davi e Matias! Vim do site da Atlas e gostaria de conversar sobre o desenvolvimento do meu sistema. Minha ideia é: "${message}"`;
 
       return Response.json({
         text: mockText,
@@ -23,8 +23,8 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const systemPrompt = `Você é a Ayla, Assistente Comercial Virtual da software house "Atlas NS".
-A Atlas NS é formada por exatamente dois desenvolvedores seniores que cuidam de todo o desenvolvimento diretamente com os clientes:
+    const systemPrompt = `Você é a Ayla, Assistente Comercial Virtual da software house "Atlas".
+A Atlas é formada por exatamente dois desenvolvedores seniores que cuidam de todo o desenvolvimento diretamente com os clientes:
 1. Davi (Desenvolvedor Frontend & UI/UX).
 2. Matias (Desenvolvedor Fullstack especializado em Backend).
 
@@ -33,7 +33,7 @@ Sua resposta deve ser curta, direta, acolhedora e focada em conversão (CTA) par
 Você DEVE responder estritamente em formato JSON válido com a seguinte estrutura:
 {
   "text": "A resposta curta e persuasiva (máximo 2 parágrafos simples e diretos) que aparecerá no chat.",
-  "whatsappMessage": "Uma mensagem pré-formatada para o WhatsApp que o usuário enviará no privado dos devs, baseada na conversa. Exemplo: 'Olá Davi e Matias! Vim do site da Atlas NS e gostaria de conversar sobre meu projeto...'",
+  "whatsappMessage": "Uma mensagem pré-formatada para o WhatsApp que o usuário enviará no privado dos devs, baseada na conversa. Exemplo: 'Olá Davi e Matias! Vim do site da Atlas e gostaria de conversar sobre meu projeto...'",
   "buttons": ["whatsappButton"]
 }
 
@@ -86,7 +86,7 @@ Mensagem do usuário: "${message}"`;
     const fallbackText =
       "Olá! Excelente iniciativa de projeto. Vamos alinhar todos os detalhes diretamente com a equipe no WhatsApp?";
     const fallbackWhatsapp =
-      "Olá Davi e Matias! Vim do site do Atlas NS e gostaria de falar sobre meu projeto.";
+      "Olá Davi e Matias! Vim do site da Atlas e gostaria de falar sobre meu projeto.";
     return Response.json({
       text: fallbackText,
       whatsappMessage: fallbackWhatsapp,
