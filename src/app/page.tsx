@@ -33,6 +33,7 @@ export default function Home() {
   const [contactName, setContactName] = useState<string>("");
   const [contactProjectType, setContactProjectType] = useState<string>("website");
   const [contactDescription, setContactDescription] = useState<string>("");
+  const [contactConsent, setContactConsent] = useState<boolean>(false);
 
   // FAQ static data
   const faqItems = [
@@ -812,6 +813,23 @@ export default function Home() {
                   />
                 </div>
 
+                <div className="form-checkbox-group">
+                  <label className="checkbox-container">
+                    <input 
+                      type="checkbox"
+                      id="contact-consent"
+                      name="consent"
+                      checked={contactConsent}
+                      onChange={(e) => setContactConsent(e.target.checked)}
+                      required
+                    />
+                    <span className="checkbox-checkmark"></span>
+                    <span className="checkbox-label-text">
+                      Li e concordo com a <a href="/politica-de-privacidade" target="_blank" rel="noopener noreferrer">Política de Privacidade</a> e autorizo o processamento comercial dos meus dados.
+                    </span>
+                  </label>
+                </div>
+
                 <button 
                   type="submit"
                   className="btn btn-success form-submit-btn"
@@ -872,7 +890,11 @@ Criamos sistemas personalizados, plataformas web e aplicações que ajudam empre
           <p className="text-xs">
             © {new Date().getFullYear()} Atlas. Todos os direitos reservados.
           </p>
-          
+          <div className="footer-legal-links">
+            <a href="/politica-de-privacidade" className="footer-legal-link">
+              Política de Privacidade
+            </a>
+          </div>
         </div>
       </div>
     </footer>
@@ -973,6 +995,9 @@ Criamos sistemas personalizados, plataformas web e aplicações que ajudam empre
                 <Send size={14} />
               </button>
             </form>
+            <div className="chat-disclaimer">
+              Ao interagir com o chat, você concorda com nossa <a href="/politica-de-privacidade" target="_blank" rel="noopener noreferrer">Política de Privacidade</a>.
+            </div>
           </div>
         </div>
 
