@@ -63,13 +63,6 @@ export default function AtlasLogo({ className = "", size = 40 }: { className?: s
       />
 
       {/* Glowing top node dot */}
-      <circle 
-        cx="50" 
-        cy="12" 
-        r="4.5" 
-        fill="var(--text-primary)" 
-        filter="url(#neon-glow-logo)"
-      />
     </svg>
   );
 }
