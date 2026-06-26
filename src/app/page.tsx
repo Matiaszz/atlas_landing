@@ -773,12 +773,13 @@ export default function Home() {
                     value={contactName}
                     onChange={(e) => setContactName(e.target.value)}
                     className="form-input"
+                    autoComplete="name"
                     required
                   />
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Tipo de Projeto</label>
+                  <span className="form-label">Tipo de Projeto</span>
                   <div className="project-type-selector">
                     {[
                       { id: "website", label: "Website / Web" },
@@ -960,6 +961,7 @@ Criamos sistemas personalizados, plataformas web e aplicações que ajudam empre
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
                 className="chat-footer-input"
+                autoComplete="off"
               />
               <button 
                 type="submit"

@@ -999,6 +999,7 @@ p {
     width: 250px;
     /* Atualizado: Usa a camada elevada de fundo com opacidade para o efeito glass */
     background: rgba(28, 24, 45, 0.7); 
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
@@ -2249,11 +2250,45 @@ p {
 }
 
 @media (max-width: 480px) {
-  .cta-form {
-    padding: 24px 16px;
+  .container {
+    padding: 0 16px;
   }
+
+  .cta-banner {
+    padding: 32px 16px;
+    gap: 32px;
+  }
+
+  .cta-banner .cta-title {
+    font-size: clamp(1.5rem, 6vw, 2.25rem);
+  }
+
+  .cta-benefit {
+    align-items: flex-start;
+  }
+
+  .cta-benefit-icon {
+    margin-top: 3.5px;
+  }
+
+  .cta-form {
+    padding: 20px 12px;
+    gap: 16px;
+  }
+
   .project-type-selector {
     grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .btn {
+    white-space: normal;
+    text-align: center;
+    padding: 12px 16px;
+  }
+
+  .hero-ctas .btn {
+    width: 100%;
   }
 }
 
