@@ -834,8 +834,7 @@ export default function Home() {
             <span>Atlas</span>
           </div>
           <p className="footer-tagline">
-            Desenvolvimento ágil e de alta performance para sistemas sob demanda. Sem intermediários, trabalhando diretamente com os engenheiros fundadores do início ao fim.
-          </p>
+Criamos sistemas personalizados, plataformas web e aplicações que ajudam empresas a ganhar produtividade, reduzir custos e acelerar o crescimento do negócio através da tecnologia.          </p>
         </div>
 
         <div className="footer-links-col">
