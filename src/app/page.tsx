@@ -590,34 +590,16 @@ export default function Home() {
                 </div>
               </div>
             </div>
-
-            <div className="services-right-col">
-              <div className="gears-container">
-                {/* Ambient Glows */}
-                <div className="gear-glow-bg" />
-                <div className="gear-glow-secondary" />
-
-                {/* Dashed Orbit Rings */}
-                <div className="gear-orbit-ring" />
-                <div className="gear-orbit-ring-dashed" />
-
-                {/* Floating Tech Particles */}
-                <div className="gear-particle gear-particle-1" />
-                <div className="gear-particle gear-particle-2" />
-                <div className="gear-particle gear-particle-3" />
-
-                {/* Three Rotating Gears */}
-                <div className="gear-wrapper gear-wrapper-large">
-                  <Cog className="gear-icon gear-large-icon" />
+            <div className="about-visual animate-on-scroll fade-in">
+              <div className="geometric-shape shape-1"></div>
+              <div className="geometric-shape shape-2"></div>
+                <div className="glass-card-abstract">
+                  <div className="code-line w-70"></div>
+                  <div className="code-line w-50"></div>
+                  <div className="code-line w-90"></div>
+                  <div className="code-line w-60"></div>
                 </div>
-                <div className="gear-wrapper gear-wrapper-medium">
-                  <Cog className="gear-icon gear-medium-icon" />
-                </div>
-                <div className="gear-wrapper gear-wrapper-small">
-                  <Cog className="gear-icon gear-small-icon" />
-                </div>
-              </div>
-            </div>
+            </div>          
           </div>
         </div>
       </section>
