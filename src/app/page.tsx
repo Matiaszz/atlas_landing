@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import AtlasLogo from "./components/ui/AtlasLogo";
 import { 
-  Terminal, 
   Smartphone, 
   Laptop, 
   Globe, 
@@ -16,16 +15,7 @@ import {
   ChevronRight, 
   CheckCircle2,
   ChevronDown,
-  Cog
 } from "lucide-react";
-
-// Platform Type
-interface Platform {
-  id: string;
-  name: string;
-  icon: React.ReactNode;
-  tech: string[];
-}
 
 export default function Home() {
   // Preloader states
@@ -869,12 +859,8 @@ export default function Home() {
               </a>
             </li>
             <li>
-              <span className="info-label">E-mail:</span>
-              <span className="footer-text">contato@atlasns.com</span>
-            </li>
-            <li>
               <span className="info-label">Operação:</span>
-              <span className="footer-text">São Paulo - SP, Brasil</span>
+              <span className="footer-text">Salto - SP, Brasil</span>
             </li>
           </ul>
         </div>
@@ -887,7 +873,7 @@ export default function Home() {
             © {new Date().getFullYear()} Atlas. Todos os direitos reservados.
           </p>
           <p className="text-xs footer-compliance">
-            Código 100% de propriedade do cliente. Interface em total conformidade com diretrizes de acessibilidade e performance de carregamento rápido.
+            Código 100% de propriedade do cliente.
           </p>
         </div>
       </div>
