@@ -359,7 +359,7 @@ export default function Home() {
       <header className="navbar">
         <div className="container nav-container">
           <a href="#hero" className="logo">
-            <AtlasLogo size={32} />
+            <AtlasLogo size={64} />
             <span>Atlas</span>
             <span className="logo-divider">/</span>
             <span key={activeSection} className="logo-section">
@@ -831,7 +831,7 @@ export default function Home() {
       <div className="container footer-content">
         <div className="footer-brand-col">
           <div className="footer-logo">
-            <AtlasLogo size={24} />
+            <AtlasLogo size={64} />
             <span>Atlas</span>
           </div>
           <p className="footer-tagline">

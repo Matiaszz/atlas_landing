@@ -5,64 +5,16 @@ export default function AtlasLogo({ className = "", size = 40 }: { className?: s
     <svg 
       width={size} 
       height={size} 
-      viewBox="0 0 100 100" 
+      viewBox="0 0 2000 2000" 
       fill="none" 
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      {/* Background Glow Filter for Neon Effect */}
-      <defs>
-        <filter id="neon-glow-logo" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="5" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-
-        {/* Deep dark purple gradient */}
-        <linearGradient id="indigo-glow-dark" x1="50" y1="12" x2="50" y2="78" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#3c106b" /> {/* Dark rich purple */}
-          <stop offset="1" stopColor="#0a0314" /> {/* Near black space purple */}
-        </linearGradient>
-        
-        {/* Glowing green gradient for core */}
-        <linearGradient id="success-glow-dark" x1="50" y1="42" x2="50" y2="70" gradientUnits="userSpaceOnUse">
-          <stop stopColor="var(--color-success)" />
-          <stop offset="1" stopColor="#134727" />
-        </linearGradient>
-      </defs>
-
-      {/* Outer Stylized Arrow (A) - Rich dark purple with glowing neon purple borders */}
-      <path 
-        d="M50 12L15 78H33L50 44L67 78H85L50 12Z" 
-        fill="url(#indigo-glow-dark)" 
-        stroke="#9d55ff" 
-        strokeWidth="2.0"
-        strokeLinejoin="round"
-      />
-      
-      {/* Inner core - Neon green diamond/node shape */}
-      <path 
-        d="M50 44L36 71H64L50 44Z" 
-        fill="url(#success-glow-dark)" 
-        stroke="var(--color-success)" 
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-
-      {/* Network dotted connector line */}
-      <line 
-        x1="50" 
-        y1="12" 
-        x2="50" 
-        y2="44" 
-        stroke="rgba(157, 85, 255, 0.5)" 
-        strokeWidth="2" 
-        strokeDasharray="3 3" 
-      />
-
-      {/* Glowing top node dot */}
+      {/* Paths from logo_atlas.svg, background path omitted for transparency */}
+      <path fill="#6327D4" d="M1009.94 448.046C1014.4 452.606 1032.25 483.062 1036.57 490.257C1058.5 526.792 1080.17 563.477 1101.6 600.311L1322.87 974.801C1282.62 995.694 1241.45 1014.74 1199.47 1031.87C1137.19 925.447 1073.93 819.6 1009.69 714.345L802.531 1062.51L754.254 1141.53L875.287 1141.88L717.606 1285.14L516.143 1285.11C571.963 1188.41 628.569 1092.16 685.955 996.373L1009.94 448.046Z"/>
+      <path fill="#FEFEFE" d="M1291 699.557C1292.68 699.415 1294.37 699.328 1296.06 699.297C1309.08 699.083 1335.53 702.221 1348.89 704.31C1416.37 714.865 1497.75 736.367 1548.56 784.278C1566.79 801.534 1581.82 828.608 1580.81 854.48C1577.48 940.081 1485.41 1003.57 1418.28 1040.47C1299.46 1105.78 1165.07 1145.93 1029.58 1146.43C998.175 1146.36 971.399 1143.92 940.371 1140.94C956.701 1135.98 976.918 1132.52 993.655 1128.16C1113.12 1097.06 1226.97 1060.17 1335.4 1001.84C1508.62 908.662 1581.31 781.746 1342.99 712.3C1327.66 707.833 1307.03 704.327 1291.86 699.821L1291 699.557Z"/>
+      <path fill="#6327D4" d="M1390.14 1091.85C1395.88 1097.16 1422.74 1144.14 1428.05 1153.15L1505.72 1285.13L1379.39 1285.12L1348.74 1285.14C1320.38 1237.02 1291.77 1189.04 1262.92 1141.21C1306.47 1127.88 1348.99 1111.38 1390.14 1091.85Z"/>
+      <path fill="#FEFEFE" d="M791.367 747.29L792.655 747.421C790.563 749.424 738.703 771.416 731.082 775.088C656.713 810.911 579.659 864.718 531.793 932.927C511.387 962.007 496.4 1001.09 503.874 1036.47C512.402 1076.83 540.768 1102.4 573.288 1124.39L562.649 1142.81C547.584 1139.58 536.068 1135.94 521.723 1130.89C482.05 1113.67 449.205 1089.65 438.195 1045.93C430.498 1015.36 440.842 978.406 457.748 952.795C526.914 848.008 673.331 775.302 791.367 747.29Z"/>
     </svg>
   );
 }
