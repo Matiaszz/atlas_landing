@@ -1021,8 +1021,8 @@ p {
 }
 
 .w-70 { width: 70%; }
-.w-50 { width: 50%; }
-.w-90 { width: 90%; }
+.w-50 { width: 50%; background-color: var(--text-primary);opacity: 0.7; }
+.w-90 { width: 90%; background-color: var(--text-primary);opacity: 0.3; } 
 .w-60 { width: 60%; background-color: var(--color-primary); opacity: 0.5; }
 
 /* Projetos */

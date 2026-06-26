@@ -433,7 +433,7 @@ export default function Home() {
               Tecnologia sob medida para <span className="hero-highlight">seu negócio crescer</span>.
             </h1>
             <p className="hero-subtitle">
-              Somos uma boutique de desenvolvimento focada em entregar sistemas web, aplicativos móveis e soluções integradas. Sem gerentes de projeto burocráticos ou intermediários: você trabalha diretamente com os engenheiros fundadores do início ao fim.
+                Desenvolvemos sistemas, sites e aplicações sob medida para empresas que querem digitalizar processos, aumentar resultados e crescer com tecnologia. Cada projeto é construído de forma personalizada para atender às necessidades do seu negócio.
             </p>
             <div className="hero-ctas">
               <button 
@@ -872,9 +872,7 @@ export default function Home() {
           <p className="text-xs">
             © {new Date().getFullYear()} Atlas. Todos os direitos reservados.
           </p>
-          <p className="text-xs footer-compliance">
-            Código 100% de propriedade do cliente.
-          </p>
+          
         </div>
       </div>
     </footer>
