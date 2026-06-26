@@ -864,6 +864,7 @@ Criamos sistemas personalizados, plataformas web e aplicações que ajudam empre
             <li><a href="#principles">Diferenciais</a></li>
             <li><a href="#faq">FAQ</a></li>
             <li><a href="#contact">Contato</a></li>
+            <li><a href="/politica-de-privacidade">Política de Privacidade</a></li>
           </ul>
         </div>
 
