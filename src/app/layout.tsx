@@ -18,9 +18,9 @@ export const metadata: Metadata = {
   description:
     "Transforme sua ideia em um site, landing page ou sistema feito sob medida. Soluções modernas para atrair clientes, automatizar processos e impulsionar seu negócio.",
   icons: {
-    icon: "/logo_atlas.svg",
-    shortcut: "/logo_atlas.svg",
-    apple: "/logo_atlas.svg",
+    icon: "/atlas-sbg.svg",
+    shortcut: "/atlas-sbg.svg",
+    apple: "/atlas-sbg.svg",
   },
 };
 
