@@ -12,18 +12,43 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
 export const metadata: Metadata = {
   title: "Atlas | Softwares Sob Demanda",
   description:
     "Transforme sua ideia em um site, landing page ou sistema feito sob medida. Soluções modernas para atrair clientes, automatizar processos e impulsionar seu negócio.",
+
   icons: {
     icon: "/atlas-sbg.svg",
     shortcut: "/atlas-sbg.svg",
     apple: "/atlas-sbg.svg",
   },
-};
 
+  openGraph: {
+    title: "Atlas | Softwares Sob Demanda",
+    description:
+      "Transforme sua ideia em um site, landing page ou sistema feito sob medida.",
+    url: "https://atlas.com.br", // seu domínio
+    siteName: "Atlas",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Atlas",
+      },
+    ],
+    locale: "pt_BR",
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Atlas | Softwares Sob Demanda",
+    description:
+      "Transforme sua ideia em um site, landing page ou sistema feito sob medida.",
+    images: ["/og-image.png"],
+  },
+};
 export default function RootLayout({
   children,
 }: Readonly<{
