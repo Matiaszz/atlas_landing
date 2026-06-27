@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import AtlasLogo from "./components/ui/AtlasLogo";
 import { 
@@ -9,9 +9,9 @@ import {
   Globe, 
   Cpu, 
   Code2, 
-  MessageSquare, 
-  Send, 
-  X, 
+  // MessageSquare, 
+  // Send, 
+  // X, 
   ChevronRight, 
   CheckCircle2,
   ChevronDown,
@@ -60,25 +60,25 @@ export default function Home() {
   ];
 
   // Live chat states
-  const [chatOpen, setChatOpen] = useState<boolean>(false);
-  const [chatMessages, setChatMessages] = useState<Array<{ sender: 'user' | 'agent', text: string, whatsappUrl?: string, buttons?: string[] }>>([
-    { 
-      sender: 'agent', 
-      text: 'Olá! Carregando assistente comercial...',
-      buttons: [],
-      whatsappUrl: ''
-    }
-  ]);
-  const [chatInput, setChatInput] = useState<string>("");
-  const [chatIsTyping, setChatIsTyping] = useState<boolean>(false);
-  const [typingText, setTypingText] = useState<string>("Ayla está pensando...");
-  const [mounted, setMounted] = useState<boolean>(false);
+  // const [chatOpen, setChatOpen] = useState<boolean>(false);
+  // const [chatMessages, setChatMessages] = useState<Array<{ sender: 'user' | 'agent', text: string, whatsappUrl?: string, buttons?: string[] }>>([
+  //   { 
+  //     sender: 'agent', 
+  //     text: 'Olá! Carregando assistente comercial...',
+  //     buttons: [],
+  //     whatsappUrl: ''
+  //   }
+  // ]);
+  // const [chatInput, setChatInput] = useState<string>("");
+  // const [chatIsTyping, setChatIsTyping] = useState<boolean>(false);
+  // const [typingText, setTypingText] = useState<string>("Ayla está pensando...");
+  // const [mounted, setMounted] = useState<boolean>(false);
 
   // Ref for chat window scrolling
-  const chatEndRef = useRef<HTMLDivElement>(null);
+  // const chatEndRef = useRef<HTMLDivElement>(null);
 
   // Sidebar drag-to-resize state and logic
-  const [sidebarWidth, setSidebarWidth] = useState<number>(420);
+  // const [sidebarWidth, setSidebarWidth] = useState<number>(420);
 
   // Hero section mouse spotlight states
   const [heroMousePos, setHeroMousePos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -91,103 +91,91 @@ export default function Home() {
     setHeroMousePos({ x, y });
   };
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault();
+  // const handleMouseDown = (e: React.MouseEvent) => {
+  //   e.preventDefault();
     
-    const handleMouseMove = (moveEvent: MouseEvent) => {
-      // Sidebar is on the right, so dragging left (smaller clientX) increases width
-      const newWidth = window.innerWidth - moveEvent.clientX;
-      if (newWidth >= 320 && newWidth <= window.innerWidth * 0.7) {
-        setSidebarWidth(newWidth);
-      }
-    };
+  //   const handleMouseMove = (moveEvent: MouseEvent) => {
+  //     // Sidebar is on the right, so dragging left (smaller clientX) increases width
+  //     const newWidth = window.innerWidth - moveEvent.clientX;
+  //     if (newWidth >= 320 && newWidth <= window.innerWidth * 0.7) {
+  //       setSidebarWidth(newWidth);
+  //     }
+  //   };
 
-    const handleMouseUp = () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
+  //   const handleMouseUp = () => {
+  //     document.removeEventListener("mousemove", handleMouseMove);
+  //     document.removeEventListener("mouseup", handleMouseUp);
+  //   };
 
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-  };
+  //   document.addEventListener("mousemove", handleMouseMove);
+  //   document.addEventListener("mouseup", handleMouseUp);
+  // };
 
-  // Determine online status based on mount state to avoid Next.js hydration mismatch
-  const getOnlineStatus = () => {
-    if (!mounted) return true; // server-side default
-    const now = new Date();
-    const day = now.getDay();
-    const hour = now.getHours();
-    return day >= 1 && day <= 5 && hour >= 8 && hour < 16;
-  };
-  const isOnline = getOnlineStatus();
-
-  // Auto-scroll to bottom of chat on new messages or typing state changes
-  useEffect(() => {
-    if (chatOpen && chatEndRef.current) {
-      const scrollToBottom = () => {
-        chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-      };
-      
-      const scrollTimeout = setTimeout(scrollToBottom, 50);
-      return () => clearTimeout(scrollTimeout);
-    }
-  }, [chatMessages, chatIsTyping, chatOpen]);
+  // // Determine online status based on mount state to avoid Next.js hydration mismatch
+  // const getOnlineStatus = () => {
+  //   if (!mounted) return true; // server-side default
+  //   const now = new Date();
+  //   const day = now.getDay();
+  //   const hour = now.getHours();
+  //   return day >= 1 && day <= 5 && hour >= 8 && hour < 16;
+  // };
+  // const isOnline = getOnlineStatus();
 
   // Set mounted state and initialize welcome message
   useEffect(() => {
     // Defer state update to next execution cycle to avoid synchronous setState inside effect warning
     const mountTimer = setTimeout(() => {
-      setMounted(true);
+      // setMounted(true);
     }, 0);
     
-    const welcomeTimer = setTimeout(() => {
-      const now = new Date();
-      const day = now.getDay();
-      const hour = now.getHours();
-      const online = day >= 1 && day <= 5 && hour >= 8 && hour < 16;
+    // const welcomeTimer = setTimeout(() => {
+    //   // const now = new Date();
+    //   // const day = now.getDay();
+    //   // const hour = now.getHours();
+    //   // const online = day >= 1 && day <= 5 && hour >= 8 && hour < 16;
       
-      const statusText = online 
-        ? "estamos ONLINE e prontos para conversar!"
-        : "estamos OFFLINE no momento (nosso horário comercial é de Segunda a Sexta, das 08h às 16h), mas você já pode deixar sua ideia registrada!";
+    //   // const statusText = online 
+    //   //   ? "estamos ONLINE e prontos para conversar!"
+    //   //   : "estamos OFFLINE no momento (nosso horário comercial é de Segunda a Sexta, das 08h às 16h), mas você já pode deixar sua ideia registrada!";
 
-      setChatMessages([
-        {
-          sender: 'agent',
-          text: `Olá! Eu sou a Ayla, a assistente comercial inteligente da Atlas. No momento, ${statusText} Qual sistema você deseja construir hoje?`,
-          buttons: ['whatsappButton'],
-          whatsappUrl: `https://wa.me/5511995995088?text=${encodeURIComponent("Olá Davi e Matias! Vim do site da Atlas e gostaria de iniciar um projeto.")}`
-        }
-      ]);
-    }, 0);
+    //   // setChatMessages([
+    //   //   {
+    //   //     sender: 'agent',
+    //   //     text: `Olá! Eu sou a Ayla, a assistente comercial inteligente da Atlas. No momento, ${statusText} Qual sistema você deseja construir hoje?`,
+    //   //     buttons: ['whatsappButton'],
+    //   //     whatsappUrl: `https://wa.me/5511995995088?text=${encodeURIComponent("Olá Davi e Matias! Vim do site da Atlas e gostaria de iniciar um projeto.")}`
+    //   //   }
+    //   // ]);
+    // }, 0);
     
     return () => {
       clearTimeout(mountTimer);
-      clearTimeout(welcomeTimer);
+      // clearTimeout(welcomeTimer);
     };
   }, []);
 
   // Dynamic typing message cycle for commercial bot
-  useEffect(() => {
-    if (!chatIsTyping) return;
+  // useEffect(() => {
+  //   // if (!chatIsTyping) return;
     
-    const phrases = [
-      "Ayla está pensando... 🧠",
-      "Formatando a melhor arquitetura... 🛠️",
-      "Consultando o Davi e o Matias no WhatsApp... 💬",
-      "Calculando prazos e atalhos comerciais... 💰",
-      "Ayla está de olho na melhor stack... 🚀",
-      "Preparando a solução perfeita para você... ✨",
-      "Ayla está digitando... 💻",
-      "Ayla está conectando com a API comercial... ⚡"
-    ];
+  //   const phrases = [
+  //     "Ayla está pensando... 🧠",
+  //     "Formatando a melhor arquitetura... 🛠️",
+  //     "Consultando o Davi e o Matias no WhatsApp... 💬",
+  //     "Calculando prazos e atalhos comerciais... 💰",
+  //     "Ayla está de olho na melhor stack... 🚀",
+  //     "Preparando a solução perfeita para você... ✨",
+  //     "Ayla está digitando... 💻",
+  //     "Ayla está conectando com a API comercial... ⚡"
+  //   ];
     
-    const interval = setInterval(() => {
-      const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-      setTypingText(randomPhrase);
-    }, 1800);
+  //   const interval = setInterval(() => {
+  //     // const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+  //     // setTypingText(randomPhrase);
+  //   }, 1800);
     
-    return () => clearInterval(interval);
-  }, [chatIsTyping]);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   // Preloader Lifecycle
   useEffect(() => {
@@ -278,63 +266,63 @@ export default function Home() {
     handleWhatsAppRedirect(message);
   };
 
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!chatInput.trim() || chatIsTyping) return;
+  // const handleSendMessage = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (!chatInput.trim() || chatIsTyping) return;
 
-    const userMsg = chatInput;
-    setChatMessages(prev => [...prev, { sender: 'user', text: userMsg }]);
-    setChatInput("");
+  //   const userMsg = chatInput;
+  //   setChatMessages(prev => [...prev, { sender: 'user', text: userMsg }]);
+  //   setChatInput("");
     
-    const phrases = [
-      "Ayla está pensando... 🧠",
-      "Formatando a melhor arquitetura... 🛠️",
-      "Consultando o Davi e o Matias no WhatsApp... 💬",
-      "Calculando prazos e atalhos comerciais... 💰",
-      "Ayla está de olho na melhor stack... 🚀",
-      "Preparando a solução perfeita para você... ✨",
-      "Ayla está digitando... 💻",
-      "Ayla está conectando com a API comercial... ⚡"
-    ];
-    setTypingText(phrases[Math.floor(Math.random() * phrases.length)]);
-    setChatIsTyping(true);
+  //   const phrases = [
+  //     "Ayla está pensando... 🧠",
+  //     "Formatando a melhor arquitetura... 🛠️",
+  //     "Consultando o Davi e o Matias no WhatsApp... 💬",
+  //     "Calculando prazos e atalhos comerciais... 💰",
+  //     "Ayla está de olho na melhor stack... 🚀",
+  //     "Preparando a solução perfeita para você... ✨",
+  //     "Ayla está digitando... 💻",
+  //     "Ayla está conectando com a API comercial... ⚡"
+  //   ];
+  //   setTypingText(phrases[Math.floor(Math.random() * phrases.length)]);
+  //   setChatIsTyping(true);
 
-    try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message: userMsg }),
-      });
+  //   try {
+  //     const response = await fetch("/api/chat", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ message: userMsg }),
+  //     });
 
-      if (!response.ok) {
-        throw new Error("Response was not ok");
-      }
+  //     if (!response.ok) {
+  //       throw new Error("Response was not ok");
+  //     }
 
-      const data = await response.json();
-      const encodedMessage = encodeURIComponent(data.whatsappMessage);
-      const phoneNumber = "5511995995088";
-      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+  //     const data = await response.json();
+  //     const encodedMessage = encodeURIComponent(data.whatsappMessage);
+  //     const phoneNumber = "5511995995088";
+  //     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 
-      setChatMessages(prev => [...prev, { 
-        sender: 'agent', 
-        text: data.text,
-        whatsappUrl: whatsappUrl,
-        buttons: data.buttons || []
-      }]);
-    } catch (error) {
-      console.error("Chat error:", error);
-      setChatMessages(prev => [...prev, { 
-        sender: 'agent', 
-        text: "Tive um problema de conexão rápida com meu servidor Gemini, mas você pode chamar a dupla diretamente no WhatsApp!",
-        whatsappUrl: `https://wa.me/5511995995088?text=${encodeURIComponent("Olá Davi e Matias! Vim do chat da Atlas e gostaria de falar sobre meu projeto.")}`,
-        buttons: ["whatsappButton"]
-      }]);
-    } finally {
-      setChatIsTyping(false);
-    }
-  };
+  //     setChatMessages(prev => [...prev, { 
+  //       sender: 'agent', 
+  //       text: data.text,
+  //       whatsappUrl: whatsappUrl,
+  //       buttons: data.buttons || []
+  //     }]);
+  //   } catch (error) {
+  //     console.error("Chat error:", error);
+  //     setChatMessages(prev => [...prev, { 
+  //       sender: 'agent', 
+  //       text: "Tive um problema de conexão rápida com meu servidor Gemini, mas você pode chamar a dupla diretamente no WhatsApp!",
+  //       whatsappUrl: `https://wa.me/5511995995088?text=${encodeURIComponent("Olá Davi e Matias! Vim do chat da Atlas e gostaria de falar sobre meu projeto.")}`,
+  //       buttons: ["whatsappButton"]
+  //     }]);
+  //   } finally {
+  //     setChatIsTyping(false);
+  //   }
+  // };
 
   return (
     <>
@@ -900,13 +888,13 @@ Criamos sistemas personalizados, plataformas web e aplicações que ajudam empre
       </div>
     </footer>
 
-      {/* Floating WhatsApp Widget */}
+      {/* Floating WhatsApp Widget (Redirecionador direto para WhatsApp) */}
       <div className="chat-widget">
+        {/* Chat comercial comentado para não ser exibido, conforme solicitado
         <div 
           className={`chat-window ${chatOpen ? "chat-window-open" : ""}`}
           style={{ width: `${sidebarWidth}px` }}
         >
-          {/* Custom drag-to-resize handle on left edge */}
           <div 
             className="sidebar-resize-handle"
             onMouseDown={handleMouseDown}
@@ -968,7 +956,6 @@ Criamos sistemas personalizados, plataformas web e aplicações que ajudam empre
                 </div>
               </div>
             )}
-            {/* Dynamic scroll anchor */}
             <div ref={chatEndRef} />
           </div>
 
@@ -1001,14 +988,20 @@ Criamos sistemas personalizados, plataformas web e aplicações que ajudam empre
             </div>
           </div>
         </div>
+        */}
 
-        <div 
-          onClick={() => setChatOpen(true)} 
-          className={`chat-bubble ${chatOpen ? "chat-bubble-hidden" : ""}`}
+        <button 
+          onClick={() => handleWhatsAppRedirect()} 
+          className="chat-bubble"
+          title="Falar no WhatsApp"
+          aria-label="Falar no WhatsApp"
         >
           <div className="chat-badge" />
-          <MessageSquare size={24} />
-        </div>
+          {/* Ícone do WhatsApp em SVG */}
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.248 8.477 3.517 2.266 2.268 3.505 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.863-9.864.001-2.63-1.019-5.101-2.875-6.958C16.804 1.966 14.33 .947 11.7.947c-5.438 0-9.863 4.421-9.866 9.865-.001 1.902.5 3.75 1.45 5.402l-.993 3.628 3.722-.977zm11.087-4.853c-.305-.153-1.805-.89-2.083-.99-.278-.101-.482-.153-.684.153-.203.305-.783.99-.96 1.194-.177.203-.355.228-.66.076-.305-.153-1.288-.475-2.454-1.516-.908-.81-1.52-1.81-1.698-2.115-.178-.305-.019-.47.133-.621.137-.136.305-.355.457-.533.153-.178.203-.305.305-.508.102-.203.05-.381-.025-.533-.076-.153-.684-1.648-.938-2.259-.247-.595-.499-.514-.684-.523-.177-.008-.38-.01-.582-.01-.203 0-.533.076-.813.381-.28.305-1.067 1.042-1.067 2.541 0 1.498 1.092 2.946 1.244 3.149.153.203 2.15 3.284 5.207 4.601.727.313 1.294.5 1.737.64.73.232 1.396.199 1.922.12.586-.087 1.805-.738 2.058-1.452.254-.713.254-1.323.178-1.452-.076-.127-.278-.203-.583-.355z" />
+          </svg>
+        </button>
       </div>
     </>
   );

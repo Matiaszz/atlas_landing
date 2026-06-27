@@ -1,6 +1,8 @@
-import { NextRequest } from "next/server";
+// import { NextRequest } from "next/server";
 
-export async function POST(request: NextRequest) {
+export async function POST(request: any) {
+  return new Response("Chat API is disabled", { status: 404 });
+  /*
   try {
     const { message } = await request.json();
 
@@ -59,9 +61,6 @@ Mensagem do usuário: "${message}"`;
             ],
           },
         ],
-        generationConfig: {
-          responseMimeType: "application/json",
-        },
       }),
     });
 
@@ -93,4 +92,6 @@ Mensagem do usuário: "${message}"`;
       buttons: ["whatsappButton"],
     });
   }
+  */
 }
+
