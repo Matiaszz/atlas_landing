@@ -16,6 +16,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Atlas | Engenharia de Software sob Demanda (Web, Mobile, Desktop)",
   description: "Desenvolvemos aplicações web, mobile e desktop customizadas com foco em alta performance, código limpo e conversão. Fale com um especialista e faça seu briefing.",
+  icons: {
+    icon: "/logo_atlas.svg",
+    shortcut: "/logo_atlas.svg",
+    apple: "/logo_atlas.svg",
+  },
 };
 
 export default function RootLayout({
