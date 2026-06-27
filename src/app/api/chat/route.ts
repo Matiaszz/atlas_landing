@@ -1,6 +1,8 @@
 // import { NextRequest } from "next/server";
 
-export async function POST(request: any) {
+import { NextRequest } from "next/server";
+
+export async function POST(request: NextRequest) {
   return new Response("Chat API is disabled", { status: 404 });
   /*
   try {
@@ -94,4 +96,3 @@ Mensagem do usuário: "${message}"`;
   }
   */
 }
-
