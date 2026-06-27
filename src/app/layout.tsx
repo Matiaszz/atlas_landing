@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     title: "Atlas | Softwares Sob Demanda",
     description:
       "Transforme sua ideia em um site, landing page ou sistema feito sob medida.",
-    url: "https://atlas.com.br", // seu domínio
+    url: "https://atlasns.com.br", // seu domínio
     siteName: "Atlas",
     images: [
       {
