@@ -37,7 +37,7 @@ export default function Home() {
   // FAQ static data
   const faqItems = [
     {
-      question: "Como funciona o processo de desenvolvimento de vocês?",
+      question: "Como funciona o processo de desenvolvimento ?",
       answer: "Nós trabalhamos de forma ágil e transparente. O projeto é estruturado em entregas semanais, onde você homologa telas funcionais e acompanha o progresso em tempo real, sem surpresas no final."
     },
     {
@@ -499,7 +499,6 @@ export default function Home() {
           <div className="section-title-wrapper">
             <span className="section-eyebrow">O que desenvolvemos</span>
             <h2 className="section-title">Soluções Digitais sob Medida para sua Empresa</h2>
-            <p>Construímos aplicações robustas focadas em estabilidade, facilidade de uso e valor comercial real.</p>
           </div>
 
           <div className="services-split-layout">
@@ -668,7 +667,6 @@ export default function Home() {
           <div className="section-title-wrapper">
             <span className="section-eyebrow">Diferenciais Clave</span>
             <h2 className="section-title">Parceria focada em resultados reais</h2>
-            <p>Criamos software de forma transparente, garantindo segurança jurídica e técnica para o seu negócio.</p>
           </div>
 
           <div className="principles-layout">

@@ -1827,6 +1827,8 @@ p {
 
 .footer-bottom {
   margin-top: 64px;
+  align-items: center;
+  text-align: center;
 }
 
 .footer-divider {
@@ -1837,8 +1839,9 @@ p {
 
 .footer-bottom-wrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  text-align: center;
   flex-wrap: wrap;
   gap: 16px;
   color: var(--text-muted);
