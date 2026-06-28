@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import CookieConsent from "./components/CookieConsent";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -11,12 +12,43 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
 export const metadata: Metadata = {
-  title: "Atlas | Engenharia de Software sob Demanda (Web, Mobile, Desktop)",
-  description: "Desenvolvemos aplicações web, mobile e desktop customizadas com foco em alta performance, código limpo e conversão. Fale com um especialista e faça seu briefing.",
-};
+  title: "Atlas | Softwares Sob Demanda",
+  description:
+    "Transforme sua ideia em um site, landing page ou sistema feito sob medida. Soluções modernas para atrair clientes, automatizar processos e impulsionar seu negócio.",
 
+  icons: {
+    icon: "/atlas-sbg.svg",
+    shortcut: "/atlas-sbg.svg",
+    apple: "/atlas-sbg.svg",
+  },
+
+  openGraph: {
+    title: "Atlas | Softwares Sob Demanda",
+    description:
+      "Transforme sua ideia em um site, landing page ou sistema feito sob medida.",
+    url: "https://atlasns.vercel.app/", // seu domínio
+    siteName: "Atlas",
+    images: [
+      {
+        url: "/atlas-sbg.svg",
+        width: 1200,
+        height: 630,
+        alt: "Atlas",
+      },
+    ],
+    locale: "pt_BR",
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Atlas | Softwares Sob Demanda",
+    description:
+      "Transforme sua ideia em um site, landing page ou sistema feito sob medida.",
+    images: ["/og-image.png"],
+  },
+};
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -24,10 +56,13 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="pt-BR"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <CookieConsent />
+      </body>
     </html>
   );
 }
