@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     siteName: "Atlas",
     images: [
       {
-        url: "/atlas-sbg.svg",
+        url: "/logo_atlas.png",
         width: 1200,
         height: 630,
         alt: "Atlas",
