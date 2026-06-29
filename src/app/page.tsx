@@ -520,8 +520,7 @@ export default function Home() {
                     </div>
                     <h3 className="card-title">Aplicativos Móveis</h3>
                     <p className="card-desc">
-                      Presença garantida no bolso dos seus clientes com aplicativos nativos iOS e Android rápidos, integrados e otimizados para as lojas.
-                    </p>
+Soluções mobile desenvolvidas para atender toda a empresa, do operacional ao administrativo, oferecendo mobilidade, integração e produtividade em qualquer lugar.                    </p>
                   </div>
                   <div className="card-stack">
                     <span className="card-stack-tag">Flutter</span>
@@ -538,8 +537,7 @@ export default function Home() {
                     </div>
                     <h3 className="card-title">Sistemas Desktop</h3>
                     <p className="card-desc">
-                      Performance extrema e integrações locais com o sistema operacional para PDVs, totens de atendimento e ferramentas de uso diário.
-                    </p>
+Aplicações de alto desempenho criadas para facilitar rotinas, centralizar informações e aumentar a produtividade das equipes.                    </p>
                   </div>
                   <div className="card-stack">
                     <span className="card-stack-tag">Flutter</span>
@@ -675,10 +673,9 @@ export default function Home() {
             </div>
             <div className="principle-item">
               <span className="principle-num">{"// 03"}</span>
-              <h3 className="principle-title">Entregas Semanais de Protótipos</h3>
+              <h3 className="principle-title">Desenvolvimento Sob Medida</h3>
               <p className="principle-body">
-                Trabalhamos com metodologias ativas. Você acompanha e valida protótipos funcionais semana a semana, vendo seu projeto evoluir em tempo real.
-              </p>
+Desenvolvemos soluções personalizadas para a realidade do seu negócio, garantindo que cada funcionalidade tenha um propósito claro.              </p>
             </div>
           </div>
         </div>
@@ -756,7 +753,7 @@ export default function Home() {
                     type="text"
                     id="contact-name"
                     name="name"
-                    placeholder="Como gostaria de ser chamado?"
+                    placeholder="Digite seu nome?"
                     value={contactName}
                     onChange={(e) => setContactName(e.target.value)}
                     className="form-input"
@@ -787,7 +784,7 @@ export default function Home() {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="contact-description" className="form-label">Conte um pouco mais (opcional)</label>
+                  <label htmlFor="contact-description" className="form-label">Descreva mais a sua ideia (opcional)</label>
                   <textarea 
                     id="contact-description"
                     name="description"
@@ -839,7 +836,7 @@ export default function Home() {
             <span>Atlas</span>
           </div>
           <p className="footer-tagline">
-Criamos sistemas personalizados, plataformas web e aplicações que ajudam empresas a ganhar produtividade, reduzir custos e acelerar o crescimento do negócio através da tecnologia.          </p>
+            Criamos sistemas personalizados, plataformas web e aplicações que ajudam empresas a ganhar produtividade, reduzir custos e acelerar o crescimento do negócio através da tecnologia.          </p>
         </div>
 
         <div className="footer-links-col">
